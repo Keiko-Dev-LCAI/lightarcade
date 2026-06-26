@@ -272,11 +272,10 @@ body {
     <div id="chess-board"></div>
     <div class="chess-diff-row">
       <button class="cdiff-btn on" id="cdiff-1" onclick="setChessDiff(1)">Beginner</button>
-      <button class="cdiff-btn" id="cdiff-2" onclick="setChessDiff(2)">Easy</button>
-      <button class="cdiff-btn" id="cdiff-3" onclick="setChessDiff(3)">Medium</button>
-      <button class="cdiff-btn" id="cdiff-4" onclick="setChessDiff(4)">Hard</button>
-      <button class="cdiff-btn" id="cdiff-5" onclick="setChessDiff(5)">Expert</button>
-      <button class="cdiff-btn" id="cdiff-6" onclick="setChessDiff(6)">Grandmaster</button>
+      <button class="cdiff-btn" id="cdiff-2" onclick="setChessDiff(2)">Club</button>
+      <button class="cdiff-btn" id="cdiff-3" onclick="setChessDiff(3)">Advanced</button>
+      <button class="cdiff-btn" id="cdiff-4" onclick="setChessDiff(4)">Master</button>
+      <button class="cdiff-btn" id="cdiff-5" onclick="setChessDiff(5)">Grandmaster</button>
     </div>
     <div class="chess-btns">
       <button class="chess-btn" onclick="newChess()">New Game</button>
@@ -466,6 +465,52 @@ function getBestMove(game, depth) {
 }
 
 // =============================================
+// STOCKFISH ENGINE
+// =============================================
+var sfWorker = null, sfReady = false, sfMoveCallback = null, sfLoading = false;
+
+// Skill level 0=~800 ELO, 20=~3200 ELO
+var CHESS_LEVELS = [null,
+  {skill:0,  time:200},   // 1 Beginner
+  {skill:5,  time:500},   // 2 Club
+  {skill:10, time:1000},  // 3 Advanced
+  {skill:15, time:2000},  // 4 Master
+  {skill:20, time:3000}   // 5 Grandmaster
+];
+
+function loadStockfish(cb) {
+  if (sfReady) { cb(); return; }
+  if (sfLoading) { setTimeout(function(){ loadStockfish(cb); }, 300); return; }
+  sfLoading = true;
+  fetch('https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js')
+    .then(function(r){ return r.text(); })
+    .then(function(code){
+      var blob = new Blob([code], {type:'application/javascript'});
+      sfWorker = new Worker(URL.createObjectURL(blob));
+      sfWorker.onmessage = function(e){
+        var msg = (typeof e === 'string') ? e : e.data;
+        if (!msg) return;
+        if (msg === 'uciok') { sfReady = true; sfLoading = false; cb(); }
+        if (msg.indexOf('bestmove') === 0 && sfMoveCallback) {
+          var mv = msg.split(' ')[1];
+          var fn = sfMoveCallback; sfMoveCallback = null; fn(mv);
+        }
+      };
+      sfWorker.postMessage('uci');
+    })
+    .catch(function(){ sfLoading = false; cb(); }); // silent fallback
+}
+
+function sfGetMove(fen, level, cb) {
+  var cfg = CHESS_LEVELS[level] || CHESS_LEVELS[1];
+  sfMoveCallback = cb;
+  sfWorker.postMessage('setoption name Skill Level value ' + cfg.skill);
+  sfWorker.postMessage('ucinewgame');
+  sfWorker.postMessage('position fen ' + fen);
+  sfWorker.postMessage('go movetime ' + cfg.time);
+}
+
+// =============================================
 // CHESS UI
 // =============================================
 var cGame = null, cSel = null, cMoves = [], cLast = null, cAI = false, cDepth = 1;
@@ -475,10 +520,6 @@ function setChessDiff(d) {
   document.querySelectorAll('.cdiff-btn').forEach(function(b){ b.classList.remove('on'); });
   document.getElementById('cdiff-'+d).classList.add('on');
   newChess();
-  if (d >= 5) {
-    document.getElementById('cstatus').textContent = 'Your turn — AI may take 10–30s to think';
-    document.getElementById('cstatus').className = 'chess-status thinking';
-  }
 }
 
 var PIECES = {wK:'♔',wQ:'♕',wR:'♖',wB:'♗',wN:'♘',wP:'♙',bK:'♚',bQ:'♛',bR:'♜',bB:'♝',bN:'♞',bP:'♟'};
@@ -596,13 +637,33 @@ function onCClick(sq) {
 function aiMove() {
   if (cGame.turn()!=='b' || cGame.game_over()) return;
   cAI=true; drawBoard();
-  setTimeout(function(){
-    var depth = cDepth;
-    var mv = getBestMove(cGame, depth);
-    if (mv) { var res=cGame.move(mv); if(res) cLast={from:res.from,to:res.to}; }
+  var fen = cGame.fen();
+
+  function applyMove(sfMove) {
+    if (sfMove && sfMove !== '(none)') {
+      var from = sfMove.slice(0,2), to = sfMove.slice(2,4);
+      var promo = sfMove.length > 4 ? sfMove[4] : undefined;
+      var cfg2 = {from:from, to:to};
+      if (promo) cfg2.promotion = promo;
+      var res = cGame.move(cfg2);
+      if (res) cLast = {from:res.from, to:res.to};
+    }
     cAI=false; drawBoard();
     if (cGame.game_over()) setTimeout(chessOver,300);
-  }, 30);
+  }
+
+  loadStockfish(function(){
+    if (sfReady && sfWorker) {
+      sfGetMove(fen, cDepth, applyMove);
+    } else {
+      // fallback minimax if Stockfish fails to load
+      setTimeout(function(){
+        var mv = getBestMove(cGame, Math.min(cDepth, 3));
+        if (mv) { var res=cGame.move(mv); if(res) cLast={from:res.from,to:res.to}; }
+        applyMove(null);
+      }, 30);
+    }
+  });
 }
 
 function chessOver() {
