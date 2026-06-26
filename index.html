@@ -35,33 +35,33 @@ body {
 .screen.active { display: flex; }
 
 /* ===== HUB ===== */
-#hub { align-items: center; justify-content: center; gap: 24px; padding: 30px 24px; }
+#hub { align-items: stretch; justify-content: flex-start; gap: 28px; padding: 40px 32px 32px 32px; overflow-y: auto; }
 
 .hub-title {
-  font-size: 64px; font-weight: 900; letter-spacing: -2px;
+  font-size: 90px; font-weight: 900; letter-spacing: -3px;
   background: linear-gradient(135deg, var(--purple-light), var(--teal));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   text-align: center;
 }
-.hub-sub { font-size: 28px; color: var(--text-dim); text-align: center; margin-top: -10px; }
+.hub-sub { font-size: 36px; color: var(--text-dim); text-align: center; margin-top: -16px; }
 
-.game-cards { display: flex; flex-direction: column; gap: 18px; width: 100%; }
+.game-cards { display: flex; flex-direction: column; gap: 22px; width: 100%; }
 
 .game-card {
   background: var(--card); border: 1px solid rgba(124,58,237,0.3);
-  border-radius: 20px; padding: 28px 32px;
-  display: flex; align-items: center; gap: 24px;
+  border-radius: 24px; padding: 36px 40px;
+  display: flex; align-items: center; gap: 30px;
   cursor: pointer; transition: border-color 0.15s; touch-action: manipulation;
 }
 .game-card:active { border-color: var(--purple); transform: scale(0.98); }
-.game-icon { font-size: 64px; }
+.game-icon { font-size: 80px; }
 .game-info { flex: 1; }
-.game-name { font-size: 40px; font-weight: 700; }
-.game-desc { font-size: 28px; color: var(--text-dim); margin-top: 4px; }
+.game-name { font-size: 52px; font-weight: 700; }
+.game-desc { font-size: 34px; color: var(--text-dim); margin-top: 6px; }
 .play-btn {
   background: var(--purple); color: white; border: none;
-  border-radius: 12px; padding: 16px 32px;
-  font-size: 30px; font-weight: 700; cursor: pointer; touch-action: manipulation;
+  border-radius: 14px; padding: 20px 44px;
+  font-size: 38px; font-weight: 700; cursor: pointer; touch-action: manipulation;
 }
 
 /* ===== SHARED HEADER ===== */
