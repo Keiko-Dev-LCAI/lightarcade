@@ -35,48 +35,48 @@ body {
 .screen.active { display: flex; }
 
 /* ===== HUB ===== */
-#hub { align-items: center; justify-content: center; gap: 18px; padding: 20px; }
+#hub { align-items: center; justify-content: center; gap: 24px; padding: 30px 24px; }
 
 .hub-title {
-  font-size: 44px; font-weight: 900; letter-spacing: -1px;
+  font-size: 64px; font-weight: 900; letter-spacing: -2px;
   background: linear-gradient(135deg, var(--purple-light), var(--teal));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   text-align: center;
 }
-.hub-sub { font-size: 18px; color: var(--text-dim); text-align: center; margin-top: -8px; }
+.hub-sub { font-size: 28px; color: var(--text-dim); text-align: center; margin-top: -10px; }
 
-.game-cards { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 420px; }
+.game-cards { display: flex; flex-direction: column; gap: 18px; width: 100%; }
 
 .game-card {
   background: var(--card); border: 1px solid rgba(124,58,237,0.3);
-  border-radius: 16px; padding: 18px 22px;
-  display: flex; align-items: center; gap: 18px;
+  border-radius: 20px; padding: 28px 32px;
+  display: flex; align-items: center; gap: 24px;
   cursor: pointer; transition: border-color 0.15s; touch-action: manipulation;
 }
 .game-card:active { border-color: var(--purple); transform: scale(0.98); }
-.game-icon { font-size: 44px; }
+.game-icon { font-size: 64px; }
 .game-info { flex: 1; }
-.game-name { font-size: 26px; font-weight: 700; }
-.game-desc { font-size: 16px; color: var(--text-dim); margin-top: 3px; }
+.game-name { font-size: 40px; font-weight: 700; }
+.game-desc { font-size: 28px; color: var(--text-dim); margin-top: 4px; }
 .play-btn {
   background: var(--purple); color: white; border: none;
-  border-radius: 10px; padding: 10px 20px;
-  font-size: 18px; font-weight: 700; cursor: pointer; touch-action: manipulation;
+  border-radius: 12px; padding: 16px 32px;
+  font-size: 30px; font-weight: 700; cursor: pointer; touch-action: manipulation;
 }
 
 /* ===== SHARED HEADER ===== */
 .game-header {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px; background: var(--surface);
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px; background: var(--surface);
   border-bottom: 1px solid rgba(124,58,237,0.3); flex-shrink: 0;
 }
 .back-btn {
   background: none; border: 1px solid var(--purple); color: var(--purple-light);
-  padding: 8px 14px; border-radius: 8px; font-size: 18px;
+  padding: 10px 18px; border-radius: 10px; font-size: 26px;
   cursor: pointer; touch-action: manipulation; white-space: nowrap;
 }
 .back-btn:active { background: var(--purple); }
-.game-title-bar { font-size: 22px; font-weight: 700; flex: 1; }
+.game-title-bar { font-size: 34px; font-weight: 700; flex: 1; }
 
 /* ===== CHESS ===== */
 .chess-body {
@@ -85,8 +85,8 @@ body {
   padding: 8px; gap: 10px; overflow: hidden;
 }
 .chess-status {
-  font-size: 20px; font-weight: 700; padding: 8px 18px;
-  border-radius: 8px; background: var(--surface);
+  font-size: 30px; font-weight: 700; padding: 12px 24px;
+  border-radius: 10px; background: var(--surface);
   border: 2px solid transparent; text-align: center;
 }
 .chess-status.white { border-color: rgba(255,255,255,0.4); }
@@ -125,13 +125,13 @@ body {
 .chess-btns { display: flex; gap: 10px; align-items: center; }
 .chess-btn {
   background: var(--surface); border: 1px solid var(--purple);
-  color: var(--purple-light); padding: 10px 16px;
-  border-radius: 8px; font-size: 16px; cursor: pointer; touch-action: manipulation;
+  color: var(--purple-light); padding: 14px 24px;
+  border-radius: 10px; font-size: 28px; cursor: pointer; touch-action: manipulation;
 }
 .chess-btn:active { background: var(--purple); color: white; }
 .diff-sel {
   background: var(--surface); border: 1px solid var(--purple);
-  color: var(--text); padding: 10px 12px; border-radius: 8px; font-size: 16px;
+  color: var(--text); padding: 12px 16px; border-radius: 10px; font-size: 26px;
 }
 
 /* ===== LIGHTBLOCKS ===== */
@@ -144,8 +144,8 @@ body {
   background: var(--surface); border: 1px solid rgba(124,58,237,0.3);
   border-radius: 8px; padding: 8px; text-align: center;
 }
-.stat-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
-.stat-val { font-size: 22px; font-weight: 700; color: var(--teal); margin-top: 2px; }
+.stat-label { font-size: 20px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+.stat-val { font-size: 34px; font-weight: 700; color: var(--teal); margin-top: 2px; }
 #next-canvas { border: 1px solid rgba(124,58,237,0.3); border-radius: 6px; display: block; }
 #blocks-canvas { border: 2px solid var(--purple); border-radius: 4px; display: block; image-rendering: pixelated; }
 .blocks-ctrl {
@@ -168,15 +168,15 @@ body {
   align-items: center; justify-content: center;
   padding: 8px; gap: 10px; overflow: hidden;
 }
-.mines-hud { display: flex; gap: 28px; align-items: center; font-size: 22px; font-weight: 700; }
+.mines-hud { display: flex; gap: 32px; align-items: center; font-size: 34px; font-weight: 700; }
 .mines-bombs { color: var(--red); }
 .mines-clock { color: var(--teal); }
-.mines-face { font-size: 34px; cursor: pointer; touch-action: manipulation; }
-.mines-diffs { display: flex; gap: 8px; }
+.mines-face { font-size: 48px; cursor: pointer; touch-action: manipulation; }
+.mines-diffs { display: flex; gap: 12px; }
 .diff-btn {
   background: var(--surface); border: 1px solid var(--purple);
-  color: var(--text-dim); padding: 8px 18px;
-  border-radius: 8px; font-size: 17px; cursor: pointer; touch-action: manipulation;
+  color: var(--text-dim); padding: 12px 28px;
+  border-radius: 10px; font-size: 28px; cursor: pointer; touch-action: manipulation;
 }
 .diff-btn.on { background: var(--purple); color: white; }
 #mines-grid { display: grid; gap: 2px; }
@@ -199,7 +199,7 @@ body {
 .mine-cell[data-n="6"] { color: #1abc9c; }
 .mine-cell[data-n="7"] { color: var(--text); }
 .mine-cell[data-n="8"] { color: #607d8b; }
-.mines-hint { font-size: 15px; color: var(--text-dim); text-align: center; }
+.mines-hint { font-size: 26px; color: var(--text-dim); text-align: center; }
 
 /* ===== OVERLAY ===== */
 .overlay {
@@ -208,12 +208,12 @@ body {
   flex-direction: column; align-items: center; justify-content: center; gap: 18px;
 }
 .overlay.on { display: flex; }
-.ov-title { font-size: 50px; font-weight: 900; text-align: center; }
-.ov-sub   { font-size: 22px; color: var(--text-dim); text-align: center; }
+.ov-title { font-size: 56px; font-weight: 900; text-align: center; }
+.ov-sub   { font-size: 34px; color: var(--text-dim); text-align: center; }
 .ov-btn {
   background: var(--purple); color: white; border: none;
-  padding: 16px 44px; border-radius: 12px;
-  font-size: 22px; font-weight: 700; cursor: pointer; touch-action: manipulation;
+  padding: 18px 50px; border-radius: 14px;
+  font-size: 32px; font-weight: 700; cursor: pointer; touch-action: manipulation;
 }
 .ov-btn.ghost { background: var(--surface); border: 1px solid var(--purple); }
 .ov-btn:active { opacity: 0.8; }
