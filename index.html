@@ -266,6 +266,22 @@ body {
       </div>
       <button class="play-btn">Play</button>
     </div>
+    <div class="game-card" onclick="go('sudoku')">
+      <div class="game-icon">🔢</div>
+      <div class="game-info">
+        <div class="game-name">Sudoku</div>
+        <div class="game-desc">Fill the grid — numbers 1 to 9</div>
+      </div>
+      <button class="play-btn">Play</button>
+    </div>
+    <div class="game-card" onclick="go('blackjack')">
+      <div class="game-icon">🃏</div>
+      <div class="game-info">
+        <div class="game-name">Blackjack</div>
+        <div class="game-desc">Beat the dealer to 21</div>
+      </div>
+      <button class="play-btn">Play</button>
+    </div>
   </div>
 </div>
 
@@ -366,6 +382,66 @@ body {
   </div>
 </div>
 
+<!-- ===== SUDOKU ===== -->
+<div id="sudoku" class="screen">
+  <div class="game-header">
+    <button class="back-btn" onclick="go('hub')">← Back</button>
+    <div class="game-title-bar">🔢 Sudoku</div>
+    <button class="chess-btn" id="sdk-new" onclick="newSudoku()">New</button>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;gap:14px;overflow:hidden;">
+    <div id="sdk-grid" style="display:grid;grid-template-columns:repeat(9,1fr);border:3px solid var(--purple);border-radius:4px;overflow:hidden;"></div>
+    <div id="sdk-numpad" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%;max-width:480px;">
+      <button class="ctrl-btn" onclick="sdkNum(1)">1</button>
+      <button class="ctrl-btn" onclick="sdkNum(2)">2</button>
+      <button class="ctrl-btn" onclick="sdkNum(3)">3</button>
+      <button class="ctrl-btn" onclick="sdkNum(4)">4</button>
+      <button class="ctrl-btn" onclick="sdkNum(5)">5</button>
+      <button class="ctrl-btn" onclick="sdkNum(6)">6</button>
+      <button class="ctrl-btn" onclick="sdkNum(7)">7</button>
+      <button class="ctrl-btn" onclick="sdkNum(8)">8</button>
+      <button class="ctrl-btn" onclick="sdkNum(9)">9</button>
+      <button class="ctrl-btn" onclick="sdkNum(0)" style="color:var(--red);">✕</button>
+    </div>
+    <div id="sdk-status" style="font-size:28px;color:var(--text-dim);"></div>
+  </div>
+</div>
+
+<!-- ===== BLACKJACK ===== -->
+<div id="blackjack" class="screen">
+  <div class="game-header">
+    <button class="back-btn" onclick="go('hub')">← Back</button>
+    <div class="game-title-bar">🃏 Blackjack</div>
+    <div id="bj-chips-hdr" style="font-size:28px;font-weight:700;color:var(--gold);">💰 1000</div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:16px;overflow:hidden;">
+    <div style="text-align:center;">
+      <div style="font-size:28px;color:var(--text-dim);">Dealer</div>
+      <div id="bj-dealer-cards" style="font-size:64px;letter-spacing:4px;min-height:80px;"></div>
+      <div id="bj-dealer-val" style="font-size:28px;color:var(--gold);min-height:36px;"></div>
+    </div>
+    <div style="text-align:center;">
+      <div style="font-size:28px;color:var(--text-dim);">You</div>
+      <div id="bj-player-cards" style="font-size:64px;letter-spacing:4px;min-height:80px;"></div>
+      <div id="bj-player-val" style="font-size:28px;color:var(--teal);min-height:36px;"></div>
+    </div>
+    <div id="bj-result" style="font-size:44px;font-weight:900;min-height:56px;text-align:center;"></div>
+    <div id="bj-bet-row" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+      <span style="font-size:28px;color:var(--text-dim);">Bet:</span>
+      <button class="chess-btn" onclick="bjBet(10)">+10</button>
+      <button class="chess-btn" onclick="bjBet(50)">+50</button>
+      <button class="chess-btn" onclick="bjBet(100)">+100</button>
+      <button class="chess-btn" onclick="bjBet(-999)" style="color:var(--red);">Clear</button>
+    </div>
+    <div id="bj-bet-show" style="font-size:34px;font-weight:700;color:var(--purple-light);min-height:44px;text-align:center;"></div>
+    <div id="bj-actions" style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;">
+      <button class="play-btn" id="bj-deal-btn" onclick="bjDeal()" style="font-size:34px;padding:16px 40px;">Deal</button>
+      <button class="play-btn" id="bj-hit-btn" onclick="bjHit()" style="display:none;font-size:34px;padding:16px 40px;background:var(--teal);">Hit</button>
+      <button class="play-btn" id="bj-stand-btn" onclick="bjStand()" style="display:none;font-size:34px;padding:16px 40px;background:#555;">Stand</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== OVERLAY ===== -->
 <div class="overlay" id="ov">
   <div class="ov-title" id="ov-title"></div>
@@ -389,6 +465,8 @@ function go(id) {
   if (id === 'lightblocks') initBlocks();
   if (id === 'minesweeper') initMines();
   if (id === 'invaders') initInvaders();
+  if (id === 'sudoku') initSudoku();
+  if (id === 'blackjack') initBlackjack();
 }
 
 function showOv(title, sub, btn, fn) {
@@ -1343,6 +1421,269 @@ document.addEventListener('keyup', function(e){
   if (cur!=='invaders') return;
   if (e.key==='ArrowLeft'||e.key==='ArrowRight') invStop();
 });
+
+// =============================================
+// SUDOKU
+// =============================================
+var sdkPuzzle, sdkSolution, sdkSelected=null, sdkGiven=[];
+
+function initSudoku() { newSudoku(); }
+
+function newSudoku() {
+  closeOv();
+  var s = generateSudoku();
+  sdkSolution = s.solution;
+  sdkPuzzle = s.puzzle;
+  sdkGiven = [];
+  for (var i=0;i<81;i++) sdkGiven[i] = sdkPuzzle[i] !== 0;
+  sdkSelected = null;
+  renderSudoku();
+}
+
+function generateSudoku() {
+  // Build a solved grid using backtracking
+  var grid = Array(81).fill(0);
+  solveSdk(grid, true);
+  var solution = grid.slice();
+  // Remove ~46 cells for a medium puzzle
+  var indices = shuffle(Array.from({length:81},function(_,i){return i;}));
+  var puzzle = solution.slice();
+  var removed = 0;
+  for (var i=0;i<indices.length && removed<46;i++) {
+    var idx = indices[i];
+    var val = puzzle[idx];
+    puzzle[idx] = 0;
+    var test = puzzle.slice();
+    if (countSolutions(test) === 1) { removed++; }
+    else { puzzle[idx] = val; }
+  }
+  return {solution:solution, puzzle:puzzle};
+}
+
+function shuffle(arr) {
+  for (var i=arr.length-1;i>0;i--) {
+    var j=Math.floor(Math.random()*(i+1)); var t=arr[i]; arr[i]=arr[j]; arr[j]=t;
+  }
+  return arr;
+}
+
+function sdkValid(grid, idx, num) {
+  var row=Math.floor(idx/9), col=idx%9;
+  for (var i=0;i<9;i++) {
+    if (grid[row*9+i]===num) return false;
+    if (grid[i*9+col]===num) return false;
+    var br=Math.floor(row/3)*3+Math.floor(i/3);
+    var bc=Math.floor(col/3)*3+(i%3);
+    if (grid[br*9+bc]===num) return false;
+  }
+  return true;
+}
+
+function solveSdk(grid, randomize) {
+  for (var i=0;i<81;i++) {
+    if (grid[i]===0) {
+      var nums = [1,2,3,4,5,6,7,8,9];
+      if (randomize) shuffle(nums);
+      for (var n=0;n<nums.length;n++) {
+        if (sdkValid(grid,i,nums[n])) {
+          grid[i]=nums[n];
+          if (solveSdk(grid,false)) return true;
+          grid[i]=0;
+        }
+      }
+      return false;
+    }
+  }
+  return true;
+}
+
+function countSolutions(grid) {
+  var count=0;
+  function solve(g) {
+    if (count>1) return;
+    for (var i=0;i<81;i++) {
+      if (g[i]===0) {
+        for (var n=1;n<=9;n++) {
+          if (sdkValid(g,i,n)) { g[i]=n; solve(g.slice()); g[i]=0; }
+        }
+        return;
+      }
+    }
+    count++;
+  }
+  solve(grid.slice());
+  return count;
+}
+
+function renderSudoku() {
+  var grid = document.getElementById('sdk-grid');
+  var maxW = Math.min(window.innerWidth-24, window.innerHeight-320);
+  var cs = Math.floor(maxW/9);
+  grid.style.width=(cs*9)+'px'; grid.style.height=(cs*9)+'px';
+  grid.innerHTML='';
+
+  for (var i=0;i<81;i++) {
+    var cell=document.createElement('div');
+    var row=Math.floor(i/9), col=i%9;
+    var bg='var(--surface)';
+    if (i===sdkSelected) bg='rgba(168,85,247,0.35)';
+    else if (sdkSelected!==null && (Math.floor(sdkSelected/9)===row||sdkSelected%9===col||
+      (Math.floor(row/3)===Math.floor(Math.floor(sdkSelected/9)/3)&&Math.floor(col/3)===Math.floor((sdkSelected%9)/3)))) bg='rgba(124,58,237,0.15)';
+
+    var thick = function(v,t,n){ return v%n===0&&v>0 ? t : '1px solid #333'; };
+    cell.style.cssText='width:'+cs+'px;height:'+cs+'px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:'+bg+
+      ';border-right:'+thick(col+1,3,3)+';border-bottom:'+thick(row+1,3,3)+';box-sizing:border-box;'+
+      'border-top:'+(row===0?'none':'1px solid #333')+';border-left:'+(col===0?'none':'1px solid #333');
+
+    var val=sdkPuzzle[i];
+    if (val) {
+      cell.textContent=val;
+      var isWrong = !sdkGiven[i] && val !== sdkSolution[i];
+      cell.style.fontSize=Math.floor(cs*0.55)+'px';
+      cell.style.fontWeight='700';
+      cell.style.color=sdkGiven[i]?'var(--text)':isWrong?'var(--red)':'var(--teal)';
+    }
+    (function(idx){ cell.addEventListener('click',function(){ sdkSelected=idx; renderSudoku(); }); })(i);
+    grid.appendChild(cell);
+  }
+}
+
+function sdkNum(n) {
+  if (sdkSelected===null || sdkGiven[sdkSelected]) return;
+  sdkPuzzle[sdkSelected] = n;
+  renderSudoku();
+  // Check win
+  var done=true;
+  for (var i=0;i<81;i++) { if (sdkPuzzle[i]!==sdkSolution[i]){done=false;break;} }
+  if (done) setTimeout(function(){ showOv('\u{1F389} Solved!','You completed the puzzle!','New Game',newSudoku); },300);
+}
+
+// =============================================
+// BLACKJACK
+// =============================================
+var bjDeck=[], bjPlayerHand=[], bjDealerHand=[], bjChips=1000, bjBetAmt=0, bjPlaying=false;
+
+var SUITS=['♥','♦','♣','♠'];
+var RANKS=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+
+function initBlackjack() {
+  bjChips=1000; bjBetAmt=0; bjPlaying=false;
+  updateBJHdr();
+  document.getElementById('bj-bet-show').textContent='Bet: 0';
+  document.getElementById('bj-result').textContent='';
+  document.getElementById('bj-dealer-cards').textContent='';
+  document.getElementById('bj-dealer-val').textContent='';
+  document.getElementById('bj-player-cards').textContent='';
+  document.getElementById('bj-player-val').textContent='';
+  showBJBtns('bet');
+}
+
+function updateBJHdr() { document.getElementById('bj-chips-hdr').textContent='\u{1F4B0} '+bjChips; }
+
+function bjBet(n) {
+  if (bjPlaying) return;
+  if (n===-999) { bjBetAmt=0; }
+  else { bjBetAmt=Math.min(bjChips, Math.max(0, bjBetAmt+n)); }
+  document.getElementById('bj-bet-show').textContent='Bet: '+bjBetAmt;
+}
+
+function newBJDeck() {
+  bjDeck=[];
+  for (var s=0;s<4;s++) for (var r=0;r<13;r++) bjDeck.push({rank:RANKS[r],suit:SUITS[s]});
+  // Shuffle 6 decks worth for variety
+  for (var i=bjDeck.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=bjDeck[i]; bjDeck[i]=bjDeck[j]; bjDeck[j]=t; }
+}
+
+function bjDraw() { if(!bjDeck.length) newBJDeck(); return bjDeck.pop(); }
+
+function cardVal(hand) {
+  var sum=0, aces=0;
+  hand.forEach(function(c){
+    if (c.rank==='A') { sum+=11; aces++; }
+    else if (['J','Q','K'].indexOf(c.rank)>=0) sum+=10;
+    else sum+=parseInt(c.rank);
+  });
+  while (sum>21&&aces>0) { sum-=10; aces--; }
+  return sum;
+}
+
+function cardStr(c) { return c.rank+c.suit; }
+function handStr(hand, hideSecond) {
+  return hand.map(function(c,i){ return (hideSecond&&i===1)?'\u{1F0A0}':cardStr(c); }).join(' ');
+}
+
+function bjDeal() {
+  if (bjBetAmt<=0) { document.getElementById('bj-result').textContent='Place a bet first!'; return; }
+  if (bjBetAmt>bjChips) { document.getElementById('bj-result').textContent='Not enough chips!'; return; }
+  if (!bjDeck.length) newBJDeck();
+  bjPlayerHand=[bjDraw(),bjDraw()];
+  bjDealerHand=[bjDraw(),bjDraw()];
+  bjPlaying=true;
+  document.getElementById('bj-result').textContent='';
+  updateBJDisplay(true);
+  var pv=cardVal(bjPlayerHand);
+  if (pv===21) { setTimeout(bjStand,600); return; }
+  showBJBtns('play');
+}
+
+function updateBJDisplay(hideDealer) {
+  document.getElementById('bj-dealer-cards').textContent=handStr(bjDealerHand,hideDealer);
+  document.getElementById('bj-dealer-val').textContent=hideDealer?'':'Dealer: '+cardVal(bjDealerHand);
+  document.getElementById('bj-player-cards').textContent=handStr(bjPlayerHand,false);
+  document.getElementById('bj-player-val').textContent='You: '+cardVal(bjPlayerHand);
+}
+
+function bjHit() {
+  bjPlayerHand.push(bjDraw());
+  var v=cardVal(bjPlayerHand);
+  updateBJDisplay(true);
+  if (v>21) { bjEnd('bust'); }
+  else if (v===21) { bjStand(); }
+}
+
+function bjStand() {
+  // Dealer draws to 17
+  while (cardVal(bjDealerHand)<17) bjDealerHand.push(bjDraw());
+  updateBJDisplay(false);
+  var pv=cardVal(bjPlayerHand), dv=cardVal(bjDealerHand);
+  if (pv===21&&bjPlayerHand.length===2&&!(dv===21&&bjDealerHand.length===2)) bjEnd('blackjack');
+  else if (dv>21) bjEnd('dealer_bust');
+  else if (pv>dv) bjEnd('win');
+  else if (pv===dv) bjEnd('push');
+  else bjEnd('lose');
+}
+
+function bjEnd(result) {
+  bjPlaying=false;
+  var msg='', color='var(--text)';
+  if (result==='blackjack') { msg='\u{1F31F} Blackjack! +'+Math.floor(bjBetAmt*1.5); bjChips+=Math.floor(bjBetAmt*1.5); color='var(--gold)'; }
+  else if (result==='win'||result==='dealer_bust') { msg='✅ You Win! +'+bjBetAmt; bjChips+=bjBetAmt; color='var(--green)'; }
+  else if (result==='push') { msg='\u{1F91D} Push — bet returned'; color='var(--text-dim)'; }
+  else if (result==='bust') { msg='\u{1F4A5} Bust! -'+bjBetAmt; bjChips-=bjBetAmt; color='var(--red)'; }
+  else { msg='❌ Dealer wins. -'+bjBetAmt; bjChips-=bjBetAmt; color='var(--red)'; }
+
+  var el=document.getElementById('bj-result');
+  el.textContent=msg; el.style.color=color;
+  updateBJHdr();
+
+  if (bjChips<=0) {
+    setTimeout(function(){ showOv('\u{1F4B8} Broke!','You ran out of chips.','Play Again',initBlackjack); },600);
+    return;
+  }
+  bjBetAmt=0;
+  document.getElementById('bj-bet-show').textContent='Bet: 0';
+  showBJBtns('bet');
+  updateBJDisplay(false);
+}
+
+function showBJBtns(mode) {
+  document.getElementById('bj-deal-btn').style.display=mode==='bet'?'block':'none';
+  document.getElementById('bj-hit-btn').style.display=mode==='play'?'block':'none';
+  document.getElementById('bj-stand-btn').style.display=mode==='play'?'block':'none';
+  document.getElementById('bj-bet-row').style.display=mode==='bet'?'flex':'none';
+}
+
+function newBJGame() { initBlackjack(); }
 
 </script>
 
