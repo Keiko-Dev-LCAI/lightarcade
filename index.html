@@ -417,33 +417,33 @@ body {
   <div class="game-header">
     <button class="back-btn" onclick="go('hub')">← Back</button>
     <div class="game-title-bar">🃏 Blackjack</div>
-    <div id="bj-chips-hdr" style="font-size:34px;font-weight:700;color:var(--gold);">💰 1000</div>
+    <div id="bj-chips-hdr" style="font-size:52px;font-weight:700;color:var(--gold);">💰 1000</div>
   </div>
-  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:24px 20px;gap:24px;overflow-y:auto;">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;padding:24px 20px;overflow-y:auto;">
     <div style="text-align:center;width:100%;">
-      <div style="font-size:36px;font-weight:700;color:var(--text-dim);margin-bottom:8px;">Dealer</div>
-      <div id="bj-dealer-cards" style="font-size:90px;letter-spacing:6px;line-height:1.1;min-height:100px;"></div>
-      <div id="bj-dealer-val" style="font-size:34px;font-weight:700;color:var(--gold);min-height:44px;margin-top:4px;"></div>
+      <div style="font-size:72px;font-weight:700;color:var(--text-dim);margin-bottom:10px;">Dealer</div>
+      <div id="bj-dealer-cards" style="font-size:180px;letter-spacing:10px;line-height:1;"></div>
+      <div id="bj-dealer-val" style="font-size:68px;font-weight:700;color:var(--gold);margin-top:6px;"></div>
     </div>
-    <div style="width:100%;border-top:1px solid rgba(124,58,237,0.3);"></div>
+    <div style="width:100%;border-top:2px solid rgba(124,58,237,0.3);"></div>
     <div style="text-align:center;width:100%;">
-      <div style="font-size:36px;font-weight:700;color:var(--text-dim);margin-bottom:8px;">You</div>
-      <div id="bj-player-cards" style="font-size:90px;letter-spacing:6px;line-height:1.1;min-height:100px;"></div>
-      <div id="bj-player-val" style="font-size:34px;font-weight:700;color:var(--teal);min-height:44px;margin-top:4px;"></div>
+      <div style="font-size:72px;font-weight:700;color:var(--text-dim);margin-bottom:10px;">You</div>
+      <div id="bj-player-cards" style="font-size:180px;letter-spacing:10px;line-height:1;"></div>
+      <div id="bj-player-val" style="font-size:68px;font-weight:700;color:var(--teal);margin-top:6px;"></div>
     </div>
-    <div id="bj-result" style="font-size:48px;font-weight:900;text-align:center;min-height:60px;"></div>
-    <div id="bj-bet-row" style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;align-items:center;">
-      <span style="font-size:36px;font-weight:700;color:var(--text-dim);">Bet:</span>
-      <button class="play-btn" onclick="bjBet(10)" style="font-size:30px;padding:14px 28px;">+10</button>
-      <button class="play-btn" onclick="bjBet(50)" style="font-size:30px;padding:14px 28px;">+50</button>
-      <button class="play-btn" onclick="bjBet(100)" style="font-size:30px;padding:14px 28px;">+100</button>
-      <button class="play-btn" onclick="bjBet(-999)" style="font-size:30px;padding:14px 28px;background:var(--red);">Clear</button>
+    <div id="bj-result" style="font-size:72px;font-weight:900;text-align:center;min-height:80px;"></div>
+    <div id="bj-bet-row" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;align-items:center;">
+      <span style="font-size:60px;font-weight:700;color:var(--text-dim);">Bet:</span>
+      <button class="play-btn" onclick="bjBet(10)" style="font-size:52px;padding:18px 36px;">+10</button>
+      <button class="play-btn" onclick="bjBet(50)" style="font-size:52px;padding:18px 36px;">+50</button>
+      <button class="play-btn" onclick="bjBet(100)" style="font-size:52px;padding:18px 36px;">+100</button>
+      <button class="play-btn" onclick="bjBet(-999)" style="font-size:52px;padding:18px 36px;background:var(--red);">Clear</button>
     </div>
-    <div id="bj-bet-show" style="font-size:40px;font-weight:700;color:var(--purple-light);text-align:center;"></div>
-    <div id="bj-actions" style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center;">
-      <button class="play-btn" id="bj-deal-btn" onclick="bjDeal()" style="font-size:40px;padding:20px 60px;">Deal</button>
-      <button class="play-btn" id="bj-hit-btn" onclick="bjHit()" style="display:none;font-size:40px;padding:20px 60px;background:var(--teal);">Hit</button>
-      <button class="play-btn" id="bj-stand-btn" onclick="bjStand()" style="display:none;font-size:40px;padding:20px 60px;background:#555;">Stand</button>
+    <div id="bj-bet-show" style="font-size:68px;font-weight:700;color:var(--purple-light);text-align:center;"></div>
+    <div id="bj-actions" style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;">
+      <button class="play-btn" id="bj-deal-btn" onclick="bjDeal()" style="font-size:64px;padding:28px 90px;">Deal</button>
+      <button class="play-btn" id="bj-hit-btn" onclick="bjHit()" style="display:none;font-size:64px;padding:28px 90px;background:var(--teal);">Hit</button>
+      <button class="play-btn" id="bj-stand-btn" onclick="bjStand()" style="display:none;font-size:64px;padding:28px 90px;background:#555;">Stand</button>
     </div>
   </div>
 </div>
