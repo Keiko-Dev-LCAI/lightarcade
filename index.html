@@ -686,15 +686,36 @@ function drawBoard() {
 
       var p = b[r][c];
       if (p) {
-        var span = document.createElement('span');
-        span.className = 'chess-piece';
-        span.style.fontSize = fs+'px';
-        span.style.color = p.color==='w' ? '#fff' : '#111';
-        span.style.textShadow = p.color==='w'
-          ? '-2px -2px 0 #222, 2px -2px 0 #222, -2px 2px 0 #222, 2px 2px 0 #222, 0 0 6px rgba(0,0,0,0.9)'
-          : '0 1px 2px rgba(255,255,255,0.3)';
-        span.textContent = PIECES[p.color+p.type.toUpperCase()]||'?';
-        cell.appendChild(span);
+        var glyph = PIECES[p.color+p.type.toUpperCase()]||'?';
+        if (p.color === 'w') {
+          // Layer 1: black piece (full size) — creates trim + shows through cross holes
+          var back = document.createElement('span');
+          back.className = 'chess-piece';
+          back.style.fontSize = fs+'px';
+          back.style.color = '#111';
+          back.style.position = 'absolute';
+          back.style.lineHeight = '1';
+          back.textContent = glyph;
+          cell.appendChild(back);
+          // Layer 2: white piece (slightly smaller) — solid white fill on top
+          var front = document.createElement('span');
+          front.className = 'chess-piece';
+          front.style.fontSize = Math.floor(fs * 0.80)+'px';
+          front.style.color = '#ffffff';
+          front.style.position = 'relative';
+          front.style.zIndex = '2';
+          front.style.lineHeight = '1';
+          front.textContent = glyph;
+          cell.appendChild(front);
+        } else {
+          var span = document.createElement('span');
+          span.className = 'chess-piece';
+          span.style.fontSize = fs+'px';
+          span.style.color = '#111';
+          span.style.textShadow = '0 1px 2px rgba(255,255,255,0.2)';
+          span.textContent = glyph;
+          cell.appendChild(span);
+        }
       }
 
       (function(sq2){ cell.addEventListener('click', function(){ onCClick(sq2); }); })(sqname);
