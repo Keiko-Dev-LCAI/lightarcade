@@ -258,6 +258,14 @@ body {
       </div>
       <button class="play-btn">Play</button>
     </div>
+    <div class="game-card" onclick="go('invaders')">
+      <div class="game-icon">👾</div>
+      <div class="game-info">
+        <div class="game-name">Light Invaders</div>
+        <div class="game-desc">Shoot the alien grid before they land</div>
+      </div>
+      <button class="play-btn">Play</button>
+    </div>
   </div>
 </div>
 
@@ -341,6 +349,23 @@ body {
   </div>
 </div>
 
+<!-- ===== LIGHT INVADERS ===== -->
+<div id="invaders" class="screen">
+  <div class="game-header">
+    <button class="back-btn" onclick="go('hub'); stopInvaders()">← Back</button>
+    <div class="game-title-bar">👾 Light Invaders</div>
+    <div id="inv-score-hdr" style="font-size:28px;font-weight:700;color:var(--teal);">Score: 0</div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;gap:8px;overflow:hidden;">
+    <canvas id="inv-canvas" style="border:2px solid var(--purple);border-radius:4px;display:block;image-rendering:pixelated;"></canvas>
+  </div>
+  <div class="blocks-ctrl">
+    <button class="ctrl-btn" ontouchstart="invDir(-1)" ontouchend="invStop()" onmousedown="invDir(-1)" onmouseup="invStop()">◀</button>
+    <button class="ctrl-btn" onclick="invFire()">🔥 Fire</button>
+    <button class="ctrl-btn" ontouchstart="invDir(1)" ontouchend="invStop()" onmousedown="invDir(1)" onmouseup="invStop()">▶</button>
+  </div>
+</div>
+
 <!-- ===== OVERLAY ===== -->
 <div class="overlay" id="ov">
   <div class="ov-title" id="ov-title"></div>
@@ -363,6 +388,7 @@ function go(id) {
   if (id === 'chess' && !cGame) initChess();
   if (id === 'lightblocks') initBlocks();
   if (id === 'minesweeper') initMines();
+  if (id === 'invaders') initInvaders();
 }
 
 function showOv(title, sub, btn, fn) {
@@ -1062,6 +1088,260 @@ window.addEventListener('resize', function(){
   if(cur==='chess') drawBoard();
   if(cur==='lightblocks'&&bCv) initBlocks();
   if(cur==='minesweeper') drawMines();
+  if(cur==='invaders'&&invCv) initInvaders();
+});
+
+// =============================================
+// LIGHT INVADERS
+// =============================================
+var invCv, invCtx, invLoop, invRunning=false;
+var invPlayer, invBullets, invEnemyBullets, invAliens, invBarriers;
+var invScore, invLives, invLevel, invAlienDir, invAlienSpeed, invDropDist;
+var invMoveTimer, invShootTimer, invPlayerDir=0, invPlayerMoving=false;
+var INV_W, INV_H, INV_CELL;
+
+function invSize() {
+  INV_W = Math.min(window.innerWidth - 20, 900);
+  INV_H = window.innerHeight - 220;
+  INV_CELL = Math.floor(INV_W / 18);
+}
+
+function initInvaders() {
+  invCv = document.getElementById('inv-canvas');
+  invCtx = invCv.getContext('2d');
+  invSize();
+  invCv.width = INV_W; invCv.height = INV_H;
+  newInvGame();
+}
+
+function newInvGame() {
+  closeOv();
+  invScore=0; invLives=3; invLevel=1;
+  setupInvLevel();
+}
+
+function setupInvLevel() {
+  var cs = INV_CELL;
+  // Player
+  invPlayer = {x: INV_W/2, y: INV_H - cs*1.5, w: cs*2, h: cs, speed: INV_W*0.007};
+  invBullets = []; invEnemyBullets = [];
+
+  // Aliens grid: 5 rows x 11 cols
+  invAliens = [];
+  var rows = 5, cols = 11;
+  var startX = (INV_W - cols*(cs*1.6)) / 2;
+  for (var r=0;r<rows;r++) {
+    for (var c=0;c<cols;c++) {
+      invAliens.push({
+        x: startX + c*(cs*1.6),
+        y: cs*2 + r*(cs*1.4),
+        w: cs*1.1, h: cs*0.9,
+        row: r, alive: true,
+        frame: 0
+      });
+    }
+  }
+
+  // Barriers
+  invBarriers = [];
+  var bCount = 4;
+  for (var b=0;b<bCount;b++) {
+    var bx = (INV_W / (bCount+1)) * (b+1) - cs;
+    invBarriers.push({x:bx, y:INV_H-cs*4, w:cs*2, h:cs, hp:5});
+  }
+
+  invAlienDir = 1; invAlienSpeed = 500 - invLevel*30;
+  invDropDist = cs * 0.6;
+  invRunning = true;
+
+  clearInterval(invLoop);
+  invLoop = setInterval(invFrame, 16);
+  document.getElementById('inv-score-hdr').textContent = 'Score: ' + invScore;
+}
+
+function invFrame() {
+  if (!invRunning) return;
+
+  // Move player
+  if (invPlayerMoving && invPlayerDir !== 0) {
+    invPlayer.x += invPlayer.speed * invPlayerDir;
+    invPlayer.x = Math.max(0, Math.min(INV_W - invPlayer.w, invPlayer.x));
+  }
+
+  // Move player bullets
+  invBullets = invBullets.filter(function(b){
+    b.y -= INV_H * 0.012;
+    return b.y > 0;
+  });
+
+  // Move enemy bullets
+  invEnemyBullets = invEnemyBullets.filter(function(b){
+    b.y += INV_H * 0.007;
+    return b.y < INV_H;
+  });
+
+  // Check bullet-alien collisions
+  var alive = invAliens.filter(function(a){ return a.alive; });
+  invBullets.forEach(function(b){
+    if (b.hit) return;
+    alive.forEach(function(a){
+      if (!b.hit && b.x>a.x && b.x<a.x+a.w && b.y>a.y && b.y<a.y+a.h) {
+        a.alive=false; b.hit=true;
+        invScore += (5-a.row)*10;
+        document.getElementById('inv-score-hdr').textContent = 'Score: '+invScore;
+      }
+    });
+  });
+  invBullets = invBullets.filter(function(b){ return !b.hit; });
+
+  // Check bullet-player collisions
+  invEnemyBullets.forEach(function(b){
+    if (b.hit) return;
+    if (b.x>invPlayer.x && b.x<invPlayer.x+invPlayer.w && b.y>invPlayer.y && b.y<invPlayer.y+invPlayer.h) {
+      b.hit=true; invLives--;
+      if (invLives<=0) { invRunning=false; clearInterval(invLoop); setTimeout(function(){ showOv('\u{1F4A5} Game Over','Score: '+invScore,'Play Again',newInvGame); },400); }
+    }
+  });
+  invEnemyBullets = invEnemyBullets.filter(function(b){ return !b.hit; });
+
+  // Check bullet-barrier collisions
+  invBullets.concat(invEnemyBullets).forEach(function(b){
+    invBarriers.forEach(function(br){
+      if (b.x>br.x && b.x<br.x+br.w && b.y>br.y && b.y<br.y+br.h) {
+        b.hit=true; br.hp--;
+      }
+    });
+  });
+  invBarriers = invBarriers.filter(function(br){ return br.hp>0; });
+
+  // Check aliens reached bottom
+  var anyAlive = invAliens.filter(function(a){ return a.alive; });
+  if (anyAlive.length === 0) {
+    invLevel++; setupInvLevel(); return;
+  }
+  var bottomAlien = Math.max.apply(null, anyAlive.map(function(a){ return a.y+a.h; }));
+  if (bottomAlien >= invPlayer.y) {
+    invRunning=false; clearInterval(invLoop);
+    setTimeout(function(){ showOv('\u{1F4A5} Invaded!','The aliens landed! Score: '+invScore,'Play Again',newInvGame); },300);
+    return;
+  }
+
+  drawInvaders();
+}
+
+var invAlienMoveTimer=0, invAlienFrame=0;
+var prevTime=0;
+function drawInvaders() {
+  var ctx=invCtx, W=INV_W, H=INV_H, cs=INV_CELL;
+  ctx.fillStyle='#0a0a1a'; ctx.fillRect(0,0,W,H);
+
+  // Draw barriers
+  invBarriers.forEach(function(br){
+    ctx.fillStyle='#10b981';
+    ctx.fillRect(br.x, br.y, br.w, br.h);
+  });
+
+  // Draw aliens
+  var aliveList = invAliens.filter(function(a){ return a.alive; });
+  aliveList.forEach(function(a){
+    var emoji = a.row===0 ? '\u{1F6F8}' : a.row<=2 ? '\u{1F47E}' : '\u{1F916}';
+    ctx.font = Math.floor(cs*0.9)+'px serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(emoji, a.x+a.w/2, a.y+a.h/2);
+  });
+
+  // Draw player
+  ctx.font = Math.floor(cs*1.2)+'px serif';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('\u{1F680}', invPlayer.x+invPlayer.w/2, invPlayer.y+invPlayer.h/2);
+
+  // Draw player bullets
+  ctx.fillStyle='#06b6d4';
+  invBullets.forEach(function(b){
+    ctx.fillRect(b.x-2, b.y-8, 4, 14);
+  });
+
+  // Draw enemy bullets
+  ctx.fillStyle='#ef4444';
+  invEnemyBullets.forEach(function(b){
+    ctx.fillRect(b.x-2, b.y-6, 4, 12);
+  });
+
+  // HUD: lives
+  ctx.font = Math.floor(cs*0.8)+'px serif';
+  ctx.textAlign='left'; ctx.textBaseline='top';
+  var livesStr = '';
+  for (var i=0;i<invLives;i++) livesStr += '\u{1F680}';
+  ctx.fillText(livesStr, 8, 4);
+
+  // Level
+  ctx.fillStyle='#a855f7'; ctx.font='bold '+Math.floor(cs*0.7)+'px sans-serif';
+  ctx.textAlign='right';
+  ctx.fillText('Level '+invLevel, W-8, 8);
+}
+
+// Periodic alien movement (separate timer)
+setInterval(function(){
+  if (!invRunning) return;
+  var alive = invAliens.filter(function(a){ return a.alive; });
+  if (!alive.length) return;
+
+  var rightEdge = Math.max.apply(null, alive.map(function(a){ return a.x+a.w; }));
+  var leftEdge  = Math.min.apply(null, alive.map(function(a){ return a.x; }));
+
+  var drop = false;
+  if (invAlienDir===1 && rightEdge >= INV_W-8) { invAlienDir=-1; drop=true; }
+  else if (invAlienDir===-1 && leftEdge <= 8) { invAlienDir=1; drop=true; }
+
+  invAliens.forEach(function(a){
+    if (!a.alive) return;
+    if (drop) a.y += invDropDist;
+    else a.x += invAlienDir * INV_CELL * 0.7;
+    a.frame = 1 - a.frame;
+  });
+}, Math.max(120, 500 - (invLevel-1)*40));
+
+// Alien shooting timer
+setInterval(function(){
+  if (!invRunning) return;
+  var alive = invAliens.filter(function(a){ return a.alive; });
+  if (!alive.length) return;
+  // Bottom aliens in each column shoot
+  var cols = {};
+  alive.forEach(function(a){
+    var col = Math.round(a.x/INV_CELL);
+    if (!cols[col] || a.y > cols[col].y) cols[col] = a;
+  });
+  var shooters = Object.values(cols);
+  var shooter = shooters[Math.floor(Math.random()*shooters.length)];
+  if (shooter) {
+    invEnemyBullets.push({x: shooter.x+shooter.w/2, y: shooter.y+shooter.h, hit:false});
+  }
+}, 900);
+
+function invFire() {
+  if (!invRunning) return;
+  if (invBullets.length >= 2) return; // max 2 bullets
+  invBullets.push({x: invPlayer.x+invPlayer.w/2, y: invPlayer.y, hit:false});
+}
+
+function invDir(d) { invPlayerDir=d; invPlayerMoving=true; }
+function invStop() { invPlayerMoving=false; invPlayerDir=0; }
+
+function stopInvaders() {
+  invRunning=false; clearInterval(invLoop);
+}
+
+// Keyboard for invaders
+document.addEventListener('keydown', function(e){
+  if (cur!=='invaders') return;
+  if (e.key==='ArrowLeft')  invDir(-1);
+  if (e.key==='ArrowRight') invDir(1);
+  if (e.key===' '||e.key==='ArrowUp') { e.preventDefault(); invFire(); }
+});
+document.addEventListener('keyup', function(e){
+  if (cur!=='invaders') return;
+  if (e.key==='ArrowLeft'||e.key==='ArrowRight') invStop();
 });
 
 </script>
