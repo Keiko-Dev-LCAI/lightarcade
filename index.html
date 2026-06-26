@@ -129,10 +129,18 @@ body {
   border-radius: 10px; font-size: 28px; cursor: pointer; touch-action: manipulation;
 }
 .chess-btn:active { background: var(--purple); color: white; }
-.diff-sel {
-  background: var(--surface); border: 1px solid var(--purple);
-  color: var(--text); padding: 12px 16px; border-radius: 10px; font-size: 26px;
+.chess-diff-row {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center;
 }
+.diff-label { font-size: 28px; color: var(--text-dim); }
+.cdiff-btn {
+  background: var(--surface); border: 2px solid var(--purple);
+  color: var(--text-dim); padding: 10px 26px;
+  border-radius: 10px; font-size: 28px; font-weight: 700;
+  cursor: pointer; touch-action: manipulation;
+}
+.cdiff-btn.on { background: var(--purple); color: white; }
+.cdiff-btn:active { background: var(--purple); color: white; }
 
 /* ===== LIGHTBLOCKS ===== */
 .blocks-body {
@@ -258,15 +266,16 @@ body {
   <div class="game-header">
     <button class="back-btn" onclick="go('hub')">← Back</button>
     <div class="game-title-bar">♟️ Chess</div>
-    <select class="diff-sel" id="cdiff" onchange="newChess()">
-      <option value="1">Easy</option>
-      <option value="2" selected>Medium</option>
-      <option value="3">Hard</option>
-    </select>
   </div>
   <div class="chess-body">
     <div class="chess-status white" id="cstatus">Your turn — White</div>
     <div id="chess-board"></div>
+    <div class="chess-diff-row">
+      <span class="diff-label">Difficulty:</span>
+      <button class="cdiff-btn on" id="cdiff-1" onclick="setChessDiff(1)">Easy</button>
+      <button class="cdiff-btn" id="cdiff-2" onclick="setChessDiff(2)">Medium</button>
+      <button class="cdiff-btn" id="cdiff-3" onclick="setChessDiff(3)">Hard</button>
+    </div>
     <div class="chess-btns">
       <button class="chess-btn" onclick="newChess()">New Game</button>
       <button class="chess-btn" onclick="undoChess()">↩ Undo</button>
@@ -457,7 +466,14 @@ function getBestMove(game, depth) {
 // =============================================
 // CHESS UI
 // =============================================
-var cGame = null, cSel = null, cMoves = [], cLast = null, cAI = false;
+var cGame = null, cSel = null, cMoves = [], cLast = null, cAI = false, cDepth = 1;
+
+function setChessDiff(d) {
+  cDepth = d;
+  document.querySelectorAll('.cdiff-btn').forEach(function(b){ b.classList.remove('on'); });
+  document.getElementById('cdiff-'+d).classList.add('on');
+  newChess();
+}
 
 var PIECES = {wK:'♔',wQ:'♕',wR:'♖',wB:'♗',wN:'♘',wP:'♙',bK:'♚',bQ:'♛',bR:'♜',bB:'♝',bN:'♞',bP:'♟'};
 
@@ -573,7 +589,7 @@ function aiMove() {
   if (cGame.turn()!=='b' || cGame.game_over()) return;
   cAI=true; drawBoard();
   setTimeout(function(){
-    var depth = parseInt(document.getElementById('cdiff').value);
+    var depth = cDepth;
     var mv = getBestMove(cGame, depth);
     if (mv) { var res=cGame.move(mv); if(res) cLast={from:res.from,to:res.to}; }
     cAI=false; drawBoard();
