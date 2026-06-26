@@ -271,10 +271,12 @@ body {
     <div class="chess-status white" id="cstatus">Your turn — White</div>
     <div id="chess-board"></div>
     <div class="chess-diff-row">
-      <span class="diff-label">Difficulty:</span>
-      <button class="cdiff-btn on" id="cdiff-1" onclick="setChessDiff(1)">Easy</button>
-      <button class="cdiff-btn" id="cdiff-2" onclick="setChessDiff(2)">Medium</button>
-      <button class="cdiff-btn" id="cdiff-3" onclick="setChessDiff(3)">Hard</button>
+      <button class="cdiff-btn on" id="cdiff-1" onclick="setChessDiff(1)">Beginner</button>
+      <button class="cdiff-btn" id="cdiff-2" onclick="setChessDiff(2)">Easy</button>
+      <button class="cdiff-btn" id="cdiff-3" onclick="setChessDiff(3)">Medium</button>
+      <button class="cdiff-btn" id="cdiff-4" onclick="setChessDiff(4)">Hard</button>
+      <button class="cdiff-btn" id="cdiff-5" onclick="setChessDiff(5)">Expert</button>
+      <button class="cdiff-btn" id="cdiff-6" onclick="setChessDiff(6)">Grandmaster</button>
     </div>
     <div class="chess-btns">
       <button class="chess-btn" onclick="newChess()">New Game</button>
@@ -473,6 +475,10 @@ function setChessDiff(d) {
   document.querySelectorAll('.cdiff-btn').forEach(function(b){ b.classList.remove('on'); });
   document.getElementById('cdiff-'+d).classList.add('on');
   newChess();
+  if (d >= 5) {
+    document.getElementById('cstatus').textContent = 'Your turn — AI may take 10–30s to think';
+    document.getElementById('cstatus').className = 'chess-status thinking';
+  }
 }
 
 var PIECES = {wK:'♔',wQ:'♕',wR:'♖',wB:'♗',wN:'♘',wP:'♙',bK:'♚',bQ:'♛',bR:'♜',bB:'♝',bN:'♞',bP:'♟'};
