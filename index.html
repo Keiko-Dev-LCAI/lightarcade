@@ -304,6 +304,7 @@ body {
     <div class="chess-btns">
       <button class="chess-btn" onclick="newChess()">New Game</button>
       <button class="chess-btn" onclick="undoChess()">↩ Undo</button>
+      <button class="chess-btn" onclick="resignChess()" style="color:var(--red);border-color:var(--red);">🏳 Resign</button>
     </div>
   </div>
 </div>
@@ -793,6 +794,11 @@ function undoChess() {
   if (cAI) return;
   cGame.undo(); cGame.undo();
   cSel=null; cMoves=[]; cLast=null; drawBoard();
+}
+
+function resignChess() {
+  if (!cGame || cGame.game_over()) return;
+  showOv('\u{1F3F3} You Resigned', 'Better luck next game.', 'New Game', newChess);
 }
 
 // =============================================
