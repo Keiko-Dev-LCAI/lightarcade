@@ -485,8 +485,8 @@ function initChess() {
 function newChess() { closeOv(); initChess(); }
 
 function boardSize() {
-  var maxW = Math.min(window.innerWidth - 16, 420);
-  var maxH = window.innerHeight - 200;
+  var maxW = window.innerWidth - 32;
+  var maxH = window.innerHeight - 240;
   return Math.floor(Math.min(maxW, maxH) / 8) * 8;
 }
 
@@ -644,8 +644,8 @@ function initBlocks() {
 
   var maxH = window.innerHeight - 240;
   var ch = Math.floor(maxH / BR);
-  var cw = Math.floor((window.innerWidth - 130) / BC);
-  bCS = Math.min(ch, cw, 28);
+  var cw = Math.floor((window.innerWidth - 160) / BC);
+  bCS = Math.min(ch, cw);
 
   bCv.width  = BC * bCS;
   bCv.height = BR * bCS;
@@ -900,7 +900,7 @@ function drawMines() {
   var cfg=mCfg;
   var maxW=window.innerWidth-16;
   var maxH=window.innerHeight-260;
-  var cs=Math.min(Math.floor(Math.min(maxW/cfg.cols,maxH/cfg.rows)),36);
+  var cs=Math.floor(Math.min(maxW/cfg.cols,maxH/cfg.rows));
   grid.style.gridTemplateColumns='repeat('+cfg.cols+','+cs+'px)';
   grid.style.gridTemplateRows='repeat('+cfg.rows+','+cs+'px)';
   grid.innerHTML='';
