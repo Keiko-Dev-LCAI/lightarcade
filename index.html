@@ -302,12 +302,14 @@ body {
   flex-shrink: 0; white-space: nowrap;
 }
 #invaders .inv-body {
-  align-items: center; justify-content: center;
-  width: 100%; padding: 8px; flex: 1; min-height: 0; overflow: hidden;
+  display: flex; flex-direction: column;
+  align-items: stretch; justify-content: stretch;
+  width: 100%; padding: 4px 8px; flex: 1; min-height: 0; overflow: hidden;
 }
 #invaders #inv-canvas {
+  flex: 1; width: 100%; height: 100%; min-height: 0;
   border: 4px solid var(--purple); border-radius: 8px;
-  display: block; image-rendering: pixelated; flex-shrink: 0;
+  display: block; image-rendering: pixelated;
 }
 
 #sudoku #sdk-grid { flex-shrink: 0; border-width: 4px; }
@@ -1399,33 +1401,19 @@ var invScore, invLives, invLevel, invAlienDir, invAlienSpeed, invDropDist;
 var invPlayerDir=0, invPlayerMoving=false;
 var INV_W, INV_H, INV_CELL;
 
-function invSize() {
-  var screen = document.getElementById('invaders');
-  var header = screen ? screen.querySelector('.game-header') : null;
-  var ctrl = screen ? screen.querySelector('.blocks-ctrl') : null;
-  var pad = 16;
-  var headerH = header ? 100 : 88;
-  var ctrlH = ctrl ? 72 : 64;
-  var usedH = pad + headerH + ctrlH;
-  INV_W = Math.min(960, Math.max(320, Math.floor(window.innerWidth - pad)));
-  INV_H = Math.min(640, Math.max(280, Math.floor(window.innerHeight - usedH)));
-  var csW = INV_W / 18;
-  var csH = INV_H / 13;
-  INV_CELL = Math.max(16, Math.floor(Math.min(csW, csH)));
-}
-function invApplyCanvasSize() {
-  if (!invCv) return;
-  invCv.width = INV_W;
-  invCv.height = INV_H;
-  invCv.style.width = INV_W + 'px';
-  invCv.style.height = INV_H + 'px';
-}
-
 function initInvaders() {
   invCv = document.getElementById('inv-canvas');
   if (!invCv) return;
   invCtx = invCv.getContext('2d');
-  newInvGame();
+  setTimeout(function() {
+    var rect = invCv.getBoundingClientRect();
+    INV_W = Math.max(320, Math.floor(rect.width  || window.innerWidth  - 20));
+    INV_H = Math.max(260, Math.floor(rect.height || window.innerHeight - 200));
+    INV_CELL = Math.max(20, Math.floor(Math.min(INV_W / 18, INV_H / 12)));
+    invCv.width  = INV_W;
+    invCv.height = INV_H;
+    newInvGame();
+  }, 120);
 }
 
 function newInvGame() {
@@ -1434,9 +1422,16 @@ function newInvGame() {
   invScore = 0;
   invLives = 3;
   invLevel = 1;
-  invSize();
-  if (!invCv) return;
-  invApplyCanvasSize();
+  if (invCv) {
+    var rect = invCv.getBoundingClientRect();
+    if (rect.width > 80) {
+      INV_W = Math.floor(rect.width);
+      INV_H = Math.floor(rect.height);
+      INV_CELL = Math.max(20, Math.floor(Math.min(INV_W / 18, INV_H / 12)));
+      invCv.width  = INV_W;
+      invCv.height = INV_H;
+    }
+  }
   setupInvLevel();
 }
 
