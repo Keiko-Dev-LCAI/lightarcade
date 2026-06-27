@@ -297,41 +297,6 @@ body {
 #blackjack #bj-hit-btn { background: var(--teal); }
 #blackjack #bj-stand-btn { background: #555; }
 
-/* ===== LIGHT RUNNER ===== */
-.runner-body {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: stretch; justify-content: center;
-  padding: 12px 16px; gap: 12px; overflow: hidden; min-height: 0;
-}
-#run-canvas {
-  border: 2px solid var(--purple); border-radius: 8px;
-  display: block; width: 100%; flex: 1; min-height: 300px;
-  background: #0d0d22; touch-action: manipulation; cursor: pointer;
-}
-.runner-hud {
-  display: flex; gap: 40px; font-size: 34px; font-weight: 700; justify-content: center;
-}
-.runner-hud .score { color: var(--teal); }
-.runner-hud .best { color: var(--gold); }
-.runner-ctrl { display: flex; justify-content: center; flex-shrink: 0; }
-.runner-jump {
-  background: linear-gradient(135deg, var(--purple), var(--teal));
-  color: #000; border: none; border-radius: 14px;
-  padding: 18px 80px; font-size: 32px;
-  font-weight: 800; cursor: pointer; touch-action: manipulation;
-}
-.runner-jump:active { opacity: 0.85; transform: scale(0.98); }
-.runner-hint { font-size: 26px; color: var(--text-dim); text-align: center; flex-shrink: 0; }
-
-#runner .runner-body {
-  flex: 1; min-height: 0; justify-content: flex-start;
-  padding: 20px 16px 28px; gap: 20px; overflow-y: auto;
-}
-#runner .runner-hud { font-size: 72px; gap: 48px; flex-shrink: 0; }
-#runner .runner-jump { font-size: 64px; padding: 32px 120px; border-radius: 20px; }
-#runner .runner-hint { font-size: 48px; }
-#runner #run-canvas { min-height: 160px; max-height: 70vh; }
-
 #invaders .inv-score-hdr {
   font-size: 72px; font-weight: 700; color: var(--teal);
   flex-shrink: 0; white-space: nowrap;
@@ -386,15 +351,6 @@ body {
       <div class="game-info">
         <div class="game-name">Chess</div>
         <div class="game-desc">Play vs AI — 5 difficulty levels</div>
-      </div>
-      <button class="play-btn">Play</button>
-    </div>
-    <div class="game-card" onclick="go('runner')">
-      <div class="game-icon">🏃</div>
-      <div class="game-info">
-        <div class="game-name">Light Runner</div>
-        <div class="game-desc">Jump obstacles — endless run</div>
-        <div class="game-best" id="hs-runner">Best: —</div>
       </div>
       <button class="play-btn">Play</button>
     </div>
@@ -525,25 +481,6 @@ body {
   </div>
 </div>
 
-<!-- ===== LIGHT RUNNER ===== -->
-<div id="runner" class="screen">
-  <div class="game-header">
-    <button class="back-btn" onclick="go('hub'); stopRunner()">← Back</button>
-    <div class="game-title-bar">🏃 Light Runner</div>
-  </div>
-  <div class="runner-body">
-    <div class="runner-hud">
-      <span class="score">Score: <span id="run-score">0</span></span>
-      <span class="best">Best: <span id="run-best">0</span></span>
-    </div>
-    <canvas id="run-canvas"></canvas>
-    <div class="runner-ctrl">
-      <button class="runner-jump" onclick="runJump()">⬆ Jump</button>
-    </div>
-    <div class="runner-hint">Space / tap / Jump button · dodge purple blocks</div>
-  </div>
-</div>
-
 <!-- ===== LIGHT INVADERS ===== -->
 <div id="invaders" class="screen">
   <div class="game-header">
@@ -639,7 +576,7 @@ body {
 // =============================================
 // PERSISTENCE (high scores + blackjack chips)
 // =============================================
-var HS_KEYS = { lightblocks:'la_hs_lightblocks', invaders:'la_hs_invaders', runner:'la_hs_runner' };
+var HS_KEYS = { lightblocks:'la_hs_lightblocks', invaders:'la_hs_invaders' };
 var BJ_CHIPS_KEY = 'la_bj_chips';
 
 function getHS(key) {
@@ -664,11 +601,9 @@ function saveBJChips() { localStorage.setItem(BJ_CHIPS_KEY, String(bjChips)); re
 function refreshHubScores() {
   var lb = document.getElementById('hs-lightblocks');
   var inv = document.getElementById('hs-invaders');
-  var run = document.getElementById('hs-runner');
   var bj = document.getElementById('hs-blackjack');
   if (lb) lb.textContent = 'Best: ' + getHS('lightblocks');
   if (inv) inv.textContent = 'Best: ' + getHS('invaders');
-  if (run) run.textContent = 'Best: ' + getHS('runner');
   if (bj) bj.textContent = 'Chips: ' + getBJChips();
 }
 
@@ -679,7 +614,6 @@ var cur = 'hub';
 var ovFn = null;
 
 function go(id) {
-  if (cur === 'runner' && id !== 'runner') stopRunner();
   document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
   cur = id;
@@ -687,7 +621,6 @@ function go(id) {
   if (id === 'chess' && !cGame) initChess();
   if (id === 'lightblocks') initBlocks();
   if (id === 'minesweeper') initMines();
-  if (id === 'runner') initRunner();
   if (id === 'invaders') initInvaders();
   if (id === 'sudoku') initSudoku();
   if (id === 'blackjack') initBlackjack();
@@ -1449,228 +1382,8 @@ window.addEventListener('resize', function(){
   if(cur==='chess') drawBoard();
   if(cur==='lightblocks'&&bCv) initBlocks();
   if(cur==='minesweeper') drawMines();
-  if(cur==='runner'&&runCv) sizeRunnerCanvas();
   if(cur==='invaders'&&invCv) initInvaders();
   if(cur==='sudoku') renderSudoku();
-});
-
-// =============================================
-// LIGHT RUNNER
-// =============================================
-var runCv, runCtx, runAnimId, runOverTimer, runRunning=false;
-var runW, runH, runGround, runPlayer, runObstacles;
-var runScore, runSpeed, runSpawnTimer, runFrame;
-
-function sizeRunnerCanvas() {
-  if (!runCv) return;
-  var body = document.querySelector('.runner-body');
-  var bw = body ? body.clientWidth : window.innerWidth;
-  var overhead = 0;
-  if (body) {
-    body.querySelectorAll('.runner-hud,.runner-ctrl,.runner-hint').forEach(function(el){
-      overhead += el.offsetHeight;
-    });
-    var bs = getComputedStyle(body);
-    var gap = parseInt(bs.gap) || 20;
-    overhead += (parseInt(bs.paddingTop) || 0) + (parseInt(bs.paddingBottom) || 0) + gap * 3;
-  } else {
-    overhead = 300;
-  }
-  var bh = body ? body.clientHeight : window.innerHeight;
-  runW = Math.max(320, Math.floor(bw - 8));
-  runH = Math.max(160, Math.floor(bh - overhead - 16));
-  runCv.width = runW;
-  runCv.height = runH;
-  if (runPlayer && runGround) {
-    runGround = runH - 50;
-    var ph = Math.max(44, Math.floor(runH * 0.2));
-    runPlayer.h = ph;
-    runPlayer.w = Math.max(32, Math.floor(ph * 0.7));
-    if (runPlayer.y > runGround - runPlayer.h) runPlayer.y = runGround - runPlayer.h;
-  }
-}
-
-function initRunner() {
-  runCv = document.getElementById('run-canvas');
-  if (!runCv) return;
-  runCtx = runCv.getContext('2d');
-  if (!runCv._jumpBound) {
-    runCv._jumpBound = true;
-    runCv.addEventListener('pointerdown', function(e){ e.preventDefault(); runJump(); });
-  }
-  sizeRunnerCanvas();
-  newRunner();
-}
-
-function newRunner() {
-  closeOv();
-  if (runOverTimer) { clearTimeout(runOverTimer); runOverTimer = null; }
-  stopRunner();
-  sizeRunnerCanvas();
-
-  runGround = runH - 50;
-  var ph = Math.max(44, Math.floor(runH * 0.2));
-  var pw = Math.max(32, Math.floor(ph * 0.7));
-  runPlayer = { x: 64, y: runGround - ph, w: pw, h: ph, vy: 0, grounded: true };
-  runObstacles = [];
-  runScore = 0;
-  runSpeed = 7;
-  runSpawnTimer = 90;
-  runFrame = 0;
-  runRunning = true;
-
-  document.getElementById('run-score').textContent = '0';
-  document.getElementById('run-best').textContent = getHS('runner');
-  drawRunner();
-  runAnimId = requestAnimationFrame(runLoop);
-}
-
-function runGravity() { return Math.max(0.45, runH * 0.0009); }
-function runJumpPower() {
-  var h = runPlayer ? runPlayer.h : 60;
-  return -Math.sqrt(2 * runGravity() * h * 2.0);
-}
-function runAirTime() {
-  return (2 * Math.abs(runJumpPower())) / runGravity();
-}
-function runObstacleH() {
-  return Math.max(22, Math.floor(runPlayer.h * 0.28));
-}
-function runObstacleW() {
-  return Math.max(14, Math.floor(runPlayer.w * (0.45 + Math.random() * 0.2)));
-}
-function runMinObstacleGap() {
-  var air = runAirTime();
-  return Math.max(240, Math.floor(runSpeed * air * 1.1) + 60);
-}
-
-function runJump() {
-  if (!runRunning || !runPlayer || !runPlayer.grounded) return;
-  runPlayer.vy = runJumpPower();
-  runPlayer.grounded = false;
-}
-
-function runLoop() {
-  if (!runRunning) return;
-  runStep();
-  drawRunner();
-  runAnimId = requestAnimationFrame(runLoop);
-}
-
-function runStep() {
-  runFrame++;
-  if (runFrame % 6 === 0) {
-    runScore++;
-    document.getElementById('run-score').textContent = runScore;
-  }
-  if (runFrame % 350 === 0 && runSpeed < 10.5) runSpeed += 0.25;
-
-  runPlayer.vy += runGravity();
-  runPlayer.y += runPlayer.vy;
-  if (runPlayer.y >= runGround - runPlayer.h) {
-    runPlayer.y = runGround - runPlayer.h;
-    runPlayer.vy = 0;
-    runPlayer.grounded = true;
-  } else {
-    runPlayer.grounded = false;
-  }
-
-  if (runSpawnTimer > 0) {
-    runSpawnTimer--;
-  } else {
-    var last = runObstacles.length ? runObstacles[runObstacles.length - 1] : null;
-    var lastRight = last ? last.x + last.w : -9999;
-    var minGap = runMinObstacleGap();
-    if (lastRight < runW - minGap) {
-      var oh = runObstacleH();
-      var ow = runObstacleW();
-      runObstacles.push({ x: runW + 20, w: ow, h: oh, y: runGround - oh });
-      runSpawnTimer = Math.max(40, Math.floor((minGap * 0.6) / runSpeed));
-    } else {
-      runSpawnTimer = 10;
-    }
-  }
-
-  for (var i = 0; i < runObstacles.length; i++) runObstacles[i].x -= runSpeed;
-  runObstacles = runObstacles.filter(function(o){ return o.x + o.w > -40; });
-
-  if (runFrame < 150) return;
-
-  var pL = runPlayer.x + 10;
-  var pR = runPlayer.x + runPlayer.w - 10;
-  var pBot = runPlayer.y + runPlayer.h - 6;
-  for (var j = 0; j < runObstacles.length; j++) {
-    var o = runObstacles[j];
-    if (pR > o.x + 8 && pL < o.x + o.w - 8 && pBot > o.y + 10) {
-      runOver();
-      return;
-    }
-  }
-}
-
-function drawRunner() {
-  if (!runCtx || !runPlayer) return;
-  var ctx = runCtx, W = runW, H = runH;
-  ctx.fillStyle = '#0d0d22';
-  ctx.fillRect(0, 0, W, H);
-
-  ctx.fillStyle = '#1a1a35';
-  ctx.fillRect(0, runGround, W, H - runGround);
-  ctx.strokeStyle = 'rgba(124,58,237,0.5)';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(0, runGround);
-  ctx.lineTo(W, runGround);
-  ctx.stroke();
-
-  ctx.strokeStyle = 'rgba(6,182,212,0.15)';
-  for (var i = 0; i < 5; i++) {
-    var lx = ((runFrame * 4 + i * 110) % (W + 100)) - 50;
-    ctx.beginPath();
-    ctx.moveTo(lx, runGround - 10 - i * 8);
-    ctx.lineTo(lx + 36, runGround - 10 - i * 8);
-    ctx.stroke();
-  }
-
-  runObstacles.forEach(function(o) {
-    ctx.fillStyle = '#a855f7';
-    ctx.fillRect(o.x, o.y, o.w, o.h);
-    ctx.fillStyle = 'rgba(255,255,255,0.25)';
-    ctx.fillRect(o.x + 2, o.y + 2, o.w - 4, 5);
-  });
-
-  var px = runPlayer.x, py = runPlayer.y, pw = runPlayer.w, ph = runPlayer.h;
-  ctx.fillStyle = '#06b6d4';
-  ctx.fillRect(px, py, pw, ph);
-  ctx.fillStyle = '#111';
-  ctx.font = Math.floor(ph * 0.65) + 'px serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('\u26A1', px + pw / 2, py + ph / 2);
-}
-
-function runOver() {
-  if (!runRunning) return;
-  runRunning = false;
-  if (runAnimId) { cancelAnimationFrame(runAnimId); runAnimId = null; }
-  var nb = setHS('runner', runScore);
-  document.getElementById('run-best').textContent = getHS('runner');
-  var sub = 'Score: ' + runScore + (nb ? ' · New best!' : (getHS('runner') ? ' · Best: ' + getHS('runner') : ''));
-  runOverTimer = setTimeout(function(){
-    runOverTimer = null;
-    showOv('\u{1F4A5} Crashed!', sub, 'Run Again', newRunner);
-  }, 250);
-}
-
-function stopRunner() {
-  runRunning = false;
-  if (runAnimId) { cancelAnimationFrame(runAnimId); runAnimId = null; }
-  if (runOverTimer) { clearTimeout(runOverTimer); runOverTimer = null; }
-}
-
-document.addEventListener('keydown', function(e) {
-  if (cur !== 'runner') return;
-  if (e.key === ' ' || e.key === 'ArrowUp') { e.preventDefault(); runJump(); }
 });
 
 // =============================================
