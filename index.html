@@ -336,8 +336,15 @@ body {
   font-size: 72px; font-weight: 700; color: var(--teal);
   flex-shrink: 0; white-space: nowrap;
 }
-#invaders .inv-body { align-items: center; justify-content: center; }
-#invaders #inv-canvas { border-width: 4px; border-radius: 8px; flex-shrink: 0; }
+#invaders .inv-body {
+  align-items: stretch; justify-content: center;
+  width: 100%; padding: 8px 4px; flex: 1; min-height: 0;
+}
+#invaders #inv-canvas {
+  width: 100%; flex: 1; min-height: 200px;
+  border-width: 4px; border-radius: 8px;
+  display: block; image-rendering: pixelated;
+}
 
 #sudoku #sdk-grid { flex-shrink: 0; border-width: 4px; }
 #sudoku #sdk-numpad { gap: 16px; flex-shrink: 0; width: 100%; max-width: 900px; }
@@ -545,7 +552,7 @@ body {
     <div id="inv-score-hdr" class="inv-score-hdr">Score: 0</div>
   </div>
   <div class="game-body inv-body">
-    <canvas id="inv-canvas" style="border:2px solid var(--purple);display:block;image-rendering:pixelated;"></canvas>
+    <canvas id="inv-canvas"></canvas>
   </div>
   <div class="blocks-ctrl">
     <button class="ctrl-btn" ontouchstart="invDir(-1)" ontouchend="invStop()" onmousedown="invDir(-1)" onmouseup="invStop()">◀</button>
@@ -1507,8 +1514,8 @@ function newRunner() {
   runPlayer = { x: 64, y: runGround - ph, w: pw, h: ph, vy: 0, grounded: true };
   runObstacles = [];
   runScore = 0;
-  runSpeed = 4;
-  runSpawnTimer = 180;
+  runSpeed = 7;
+  runSpawnTimer = 90;
   runFrame = 0;
   runRunning = true;
 
@@ -1521,7 +1528,20 @@ function newRunner() {
 function runGravity() { return Math.max(0.45, runH * 0.0009); }
 function runJumpPower() {
   var h = runPlayer ? runPlayer.h : 60;
-  return -Math.sqrt(2 * runGravity() * h * 1.55);
+  return -Math.sqrt(2 * runGravity() * h * 2.0);
+}
+function runAirTime() {
+  return (2 * Math.abs(runJumpPower())) / runGravity();
+}
+function runObstacleH() {
+  return Math.max(22, Math.floor(runPlayer.h * 0.28));
+}
+function runObstacleW() {
+  return Math.max(14, Math.floor(runPlayer.w * (0.45 + Math.random() * 0.2)));
+}
+function runMinObstacleGap() {
+  var air = runAirTime();
+  return Math.max(240, Math.floor(runSpeed * air * 1.1) + 60);
 }
 
 function runJump() {
@@ -1543,7 +1563,7 @@ function runStep() {
     runScore++;
     document.getElementById('run-score').textContent = runScore;
   }
-  if (runFrame % 400 === 0 && runSpeed < 11) runSpeed += 0.4;
+  if (runFrame % 350 === 0 && runSpeed < 10.5) runSpeed += 0.25;
 
   runPlayer.vy += runGravity();
   runPlayer.y += runPlayer.vy;
@@ -1558,13 +1578,16 @@ function runStep() {
   if (runSpawnTimer > 0) {
     runSpawnTimer--;
   } else {
-    var lastX = runObstacles.length ? runObstacles[runObstacles.length - 1].x : -999;
-    if (lastX < runW - 260) {
-      var oh = Math.floor(runPlayer.h * 0.42);
-      runObstacles.push({ x: runW + 24, w: 28 + Math.floor(Math.random() * 14), h: oh, y: runGround - oh });
-      runSpawnTimer = 100 + Math.floor(Math.random() * 50);
+    var last = runObstacles.length ? runObstacles[runObstacles.length - 1] : null;
+    var lastRight = last ? last.x + last.w : -9999;
+    var minGap = runMinObstacleGap();
+    if (lastRight < runW - minGap) {
+      var oh = runObstacleH();
+      var ow = runObstacleW();
+      runObstacles.push({ x: runW + 20, w: ow, h: oh, y: runGround - oh });
+      runSpawnTimer = Math.max(40, Math.floor((minGap * 0.6) / runSpeed));
     } else {
-      runSpawnTimer = 15;
+      runSpawnTimer = 10;
     }
   }
 
@@ -1661,18 +1684,25 @@ var INV_W, INV_H, INV_CELL;
 
 function invSize() {
   var body = document.querySelector('#invaders .inv-body');
-  var bw = body ? body.clientWidth - 16 : window.innerWidth - 20;
-  var bh = body ? body.clientHeight - 16 : window.innerHeight - 320;
-  INV_W = Math.min(Math.max(320, bw), 900);
-  INV_H = Math.max(200, bh);
-  INV_CELL = Math.max(12, Math.floor(INV_W / 18));
+  var header = document.querySelector('#invaders .game-header');
+  var ctrl = document.querySelector('#invaders .blocks-ctrl');
+  var bw = window.innerWidth - 16;
+  var bh = window.innerHeight - 24;
+  if (header) bh -= header.offsetHeight;
+  if (ctrl) bh -= ctrl.offsetHeight;
+  if (body && body.clientWidth > 80) bw = body.clientWidth;
+  if (body && body.clientHeight > 80) bh = body.clientHeight;
+  INV_W = Math.max(320, Math.floor(bw));
+  INV_H = Math.max(240, Math.floor(bh));
+  INV_CELL = Math.max(14, Math.floor(INV_W / 18));
 }
 
 function initInvaders() {
   invCv = document.getElementById('inv-canvas');
   invCtx = invCv.getContext('2d');
   invSize();
-  invCv.width = INV_W; invCv.height = INV_H;
+  invCv.width = INV_W;
+  invCv.height = INV_H;
   newInvGame();
 }
 
