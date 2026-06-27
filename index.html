@@ -78,18 +78,18 @@ body {
 .back-btn:active { background: var(--purple); }
 .game-title-bar { font-size: 34px; font-weight: 700; flex: 1; }
 
-/* ===== GLOBAL LARGE UI (every game screen) ===== */
-.screen:not(#hub) .game-header { padding: 28px 36px; gap: 24px; flex-shrink: 0; }
+/* ===== GLOBAL READABLE UI — 2× base, playable (every game screen) ===== */
+.screen:not(#hub) .game-header { padding: 16px 20px; gap: 14px; flex-shrink: 0; }
 .screen:not(#hub) .back-btn {
-  font-size: 104px; padding: 40px 72px; border-radius: 20px; border-width: 3px;
+  font-size: 52px; padding: 20px 36px; border-radius: 14px; border-width: 2px;
 }
-.screen:not(#hub) .game-title-bar { font-size: 136px; }
+.screen:not(#hub) .game-title-bar { font-size: 68px; }
 .screen:not(#hub) .chess-btn {
-  font-size: 112px; padding: 40px 72px; border-radius: 20px; border-width: 3px;
+  font-size: 56px; padding: 20px 36px; border-radius: 14px; border-width: 2px;
 }
-.screen:not(#hub) .blocks-ctrl { gap: 16px; padding: 20px 24px; flex-shrink: 0; }
+.screen:not(#hub) .blocks-ctrl { gap: 12px; padding: 14px 18px; flex-shrink: 0; }
 .screen:not(#hub) .ctrl-btn {
-  border-radius: 16px; padding: 28px 0; font-size: 56px; border-width: 2px;
+  border-radius: 12px; padding: 18px 0; font-size: 48px; border-width: 2px;
 }
 .game-body {
   flex: 1; min-height: 0;
@@ -167,9 +167,9 @@ body {
   align-items: center; justify-content: flex-start;
   overflow-y: auto; overflow-x: hidden; min-height: 0;
 }
-#chess .chess-status { font-size: 56px; padding: 20px 40px; border-radius: 16px; flex-shrink: 0; }
-#chess .chess-diff-row { gap: 16px; flex-shrink: 0; flex-wrap: wrap; justify-content: center; }
-#chess .cdiff-btn { font-size: 48px; padding: 20px 36px; border-radius: 14px; }
+#chess .chess-status { font-size: 40px; padding: 14px 28px; border-radius: 12px; flex-shrink: 0; }
+#chess .chess-diff-row { gap: 12px; flex-shrink: 0; flex-wrap: wrap; justify-content: center; }
+#chess .cdiff-btn { font-size: 40px; padding: 14px 28px; border-radius: 12px; }
 #chess .chess-btns { gap: 20px; flex-shrink: 0; flex-wrap: wrap; justify-content: center; }
 #chess #chess-board { flex-shrink: 0; border-width: 4px; }
 
@@ -206,17 +206,17 @@ body {
   align-items: flex-start; justify-content: center;
   gap: 28px; padding: 20px; overflow-y: auto; overflow-x: hidden;
 }
-#lightblocks .blocks-side { gap: 20px; min-width: 300px; flex-shrink: 0; }
+#lightblocks .blocks-side { gap: 14px; min-width: 160px; flex-shrink: 0; }
 #lightblocks .blocks-stat {
-  border-radius: 16px; padding: 20px; border-width: 2px;
+  border-radius: 12px; padding: 14px; border-width: 2px;
 }
-#lightblocks .stat-label { font-size: 48px; letter-spacing: 2px; }
-#lightblocks .stat-val { font-size: 80px; margin-top: 8px; }
+#lightblocks .stat-label { font-size: 32px; letter-spacing: 1px; }
+#lightblocks .stat-val { font-size: 56px; margin-top: 6px; }
 #lightblocks #next-canvas {
-  width: 144px; height: 144px; border-width: 2px; border-radius: 12px;
+  width: 96px; height: 96px; border-width: 2px; border-radius: 8px;
 }
-#lightblocks #blocks-canvas { border-width: 4px; border-radius: 8px; flex-shrink: 0; }
-#lightblocks .ctrl-drop { font-size: 48px; padding: 24px; }
+#lightblocks #blocks-canvas { border-width: 3px; border-radius: 6px; flex-shrink: 0; }
+#lightblocks .ctrl-drop { font-size: 36px; padding: 16px; }
 
 /* ===== MINESWEEPER ===== */
 .mines-body {
@@ -263,62 +263,61 @@ body {
   padding: 24px 20px 32px; gap: 24px;
   overflow-y: auto; overflow-x: hidden;
 }
-#minesweeper .mines-hud { gap: 48px; font-size: 72px; }
-#minesweeper .mines-face { font-size: 96px; }
-#minesweeper .mines-diffs { gap: 24px; flex-shrink: 0; }
+#minesweeper .mines-hud { gap: 32px; font-size: 48px; }
+#minesweeper .mines-face { font-size: 64px; }
+#minesweeper .mines-diffs { gap: 16px; flex-shrink: 0; }
 #minesweeper .diff-btn {
-  padding: 24px 56px; border-radius: 16px; font-size: 56px; border-width: 2px;
+  padding: 16px 36px; border-radius: 12px; font-size: 40px; border-width: 2px;
 }
-#minesweeper #mines-grid { gap: 4px; flex-shrink: 0; }
-#minesweeper .mine-cell { border-radius: 6px; }
-#minesweeper .mines-hint { font-size: 48px; flex-shrink: 0; }
+#minesweeper #mines-grid { gap: 3px; flex-shrink: 0; }
+#minesweeper .mine-cell { border-radius: 5px; }
+#minesweeper .mines-hint { font-size: 36px; flex-shrink: 0; }
 
 /* ===== BLACKJACK (large UI) ===== */
 #blackjack .bj-body {
   flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center;
-  justify-content: flex-start; padding: 48px 40px; gap: 32px; overflow-y: auto;
+  justify-content: flex-start; padding: 24px 20px; gap: 20px; overflow-y: auto;
 }
-#blackjack #bj-chips-hdr { font-size: 72px; font-weight: 700; color: var(--gold); flex-shrink: 0; white-space: nowrap; }
+#blackjack #bj-chips-hdr { font-size: 40px; font-weight: 700; color: var(--gold); flex-shrink: 0; white-space: nowrap; }
 #blackjack .bj-zone { text-align: center; width: 100%; }
-#blackjack .bj-label { font-size: 144px; font-weight: 700; color: var(--text-dim); margin-bottom: 20px; }
-#blackjack .bj-cards { font-size: 360px; letter-spacing: 20px; line-height: 1; }
-#blackjack .bj-val-gold { font-size: 136px; font-weight: 700; color: var(--gold); margin-top: 12px; }
-#blackjack .bj-val-teal { font-size: 136px; font-weight: 700; color: var(--teal); margin-top: 12px; }
-#blackjack .bj-divider { width: 100%; border-top: 4px solid rgba(124,58,237,0.3); }
-#blackjack #bj-result { font-size: 144px; font-weight: 900; text-align: center; min-height: 160px; }
+#blackjack .bj-label { font-size: 36px; font-weight: 700; color: var(--text-dim); margin-bottom: 12px; }
+#blackjack .bj-cards { font-size: 72px; letter-spacing: 8px; line-height: 1; }
+#blackjack .bj-val-gold { font-size: 40px; font-weight: 700; color: var(--gold); margin-top: 8px; }
+#blackjack .bj-val-teal { font-size: 40px; font-weight: 700; color: var(--teal); margin-top: 8px; }
+#blackjack .bj-divider { width: 100%; border-top: 3px solid rgba(124,58,237,0.3); }
+#blackjack #bj-result { font-size: 44px; font-weight: 900; text-align: center; min-height: 52px; }
 
-#blackjack #bj-bet-row { display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; align-items: center; }
-#blackjack .bj-bet-lbl { font-size: 120px; font-weight: 700; color: var(--text-dim); }
-#blackjack .bj-chip-btn { font-size: 104px; padding: 36px 72px; }
+#blackjack #bj-bet-row { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; align-items: center; }
+#blackjack .bj-bet-lbl { font-size: 40px; font-weight: 700; color: var(--text-dim); }
+#blackjack .bj-chip-btn { font-size: 40px; padding: 18px 36px; }
 #blackjack .bj-chip-clear { background: var(--red); }
-#blackjack #bj-bet-show { font-size: 136px; font-weight: 700; color: var(--purple-light); text-align: center; }
-#blackjack #bj-actions { display: flex; gap: 48px; flex-wrap: wrap; justify-content: center; }
-#blackjack .bj-action-btn { font-size: 128px; padding: 56px 180px; }
+#blackjack #bj-bet-show { font-size: 44px; font-weight: 700; color: var(--purple-light); text-align: center; }
+#blackjack #bj-actions { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+#blackjack .bj-action-btn { font-size: 48px; padding: 22px 56px; }
 #blackjack #bj-hit-btn { background: var(--teal); }
 #blackjack #bj-stand-btn { background: #555; }
 
 #invaders .inv-score-hdr {
-  font-size: 72px; font-weight: 700; color: var(--teal);
+  font-size: 40px; font-weight: 700; color: var(--teal);
   flex-shrink: 0; white-space: nowrap;
 }
 #invaders .inv-body {
-  align-items: stretch; justify-content: center;
-  width: 100%; padding: 8px 4px; flex: 1; min-height: 0;
+  align-items: center; justify-content: center;
+  width: 100%; padding: 8px; flex: 1; min-height: 0; overflow: hidden;
 }
 #invaders #inv-canvas {
-  width: 100%; flex: 1; min-height: 200px;
-  border-width: 4px; border-radius: 8px;
-  display: block; image-rendering: pixelated;
+  border: 4px solid var(--purple); border-radius: 8px;
+  display: block; image-rendering: pixelated; flex-shrink: 0;
 }
 
 #sudoku #sdk-grid { flex-shrink: 0; border-width: 4px; }
 #sudoku #sdk-numpad { gap: 16px; flex-shrink: 0; width: 100%; max-width: 900px; }
-#sudoku #sdk-numpad .ctrl-btn { font-size: 64px; padding: 24px 0; }
+#sudoku #sdk-numpad .ctrl-btn { font-size: 44px; padding: 16px 0; }
 #sudoku .sdk-hint {
-  font-size: 48px; color: var(--text-dim); text-align: center;
+  font-size: 36px; color: var(--text-dim); text-align: center;
   line-height: 1.5; flex-shrink: 0; padding: 0 12px;
 }
-#sudoku #sdk-status { font-size: 64px; color: var(--text-dim); text-align: center; flex-shrink: 0; }
+#sudoku #sdk-status { font-size: 40px; color: var(--text-dim); text-align: center; flex-shrink: 0; }
 
 /* ===== OVERLAY ===== */
 .overlay {
@@ -328,12 +327,12 @@ body {
   gap: 32px; padding: 32px 20px; overflow-y: auto;
 }
 .overlay.on { display: flex; }
-.ov-title { font-size: 120px; font-weight: 900; text-align: center; padding: 0 24px; }
-.ov-sub   { font-size: 72px; color: var(--text-dim); text-align: center; padding: 0 24px; }
+.ov-title { font-size: 64px; font-weight: 900; text-align: center; padding: 0 20px; }
+.ov-sub   { font-size: 40px; color: var(--text-dim); text-align: center; padding: 0 20px; }
 .ov-btn {
   background: var(--purple); color: white; border: none;
-  padding: 40px 100px; border-radius: 20px;
-  font-size: 80px; font-weight: 700; cursor: pointer; touch-action: manipulation;
+  padding: 22px 56px; border-radius: 14px;
+  font-size: 48px; font-weight: 700; cursor: pointer; touch-action: manipulation;
 }
 .ov-btn.ghost { background: var(--surface); border: 1px solid var(--purple); }
 .ov-btn:active { opacity: 0.8; }
@@ -436,7 +435,7 @@ body {
     <div class="blocks-side">
       <div class="blocks-stat">
         <div class="stat-label">Next</div>
-        <canvas id="next-canvas" width="144" height="144"></canvas>
+        <canvas id="next-canvas" width="96" height="96"></canvas>
       </div>
       <div class="blocks-stat">
         <div class="stat-label">Score</div>
@@ -1012,7 +1011,7 @@ function initBlocks() {
   bNx  = bNc.getContext('2d');
 
   var bodyEl = document.querySelector('#lightblocks .blocks-body');
-  var sideW = 320;
+  var sideW = 180;
   var maxH = bodyEl && bodyEl.clientHeight > 80 ? bodyEl.clientHeight - 16 : window.innerHeight - 420;
   var maxW = bodyEl && bodyEl.clientWidth > 200 ? bodyEl.clientWidth - sideW - 48 : window.innerWidth - sideW - 48;
   var ch = Math.floor(maxH / BR);
@@ -1384,8 +1383,7 @@ window.addEventListener('resize', function(){
   if(cur==='minesweeper') drawMines();
   if(cur==='invaders'&&invCv) {
     invSize();
-    invCv.width = INV_W;
-    invCv.height = INV_H;
+    invApplyCanvasSize();
     if (invRunning) setupInvLevel();
     else drawInvaders();
   }
@@ -1402,17 +1400,25 @@ var invPlayerDir=0, invPlayerMoving=false;
 var INV_W, INV_H, INV_CELL;
 
 function invSize() {
-  var body = document.querySelector('#invaders .inv-body');
-  var bw = window.innerWidth - 16;
-  var bh = window.innerHeight - 24;
-  if (body && body.clientWidth > 80) bw = body.clientWidth - 8;
-  if (body && body.clientHeight > 80) bh = body.clientHeight - 8;
-  INV_W = Math.max(320, Math.floor(bw));
-  INV_H = Math.max(280, Math.floor(bh));
-  // Scale cells to fit BOTH width (11 cols) and height (5 rows + player zone)
+  var screen = document.getElementById('invaders');
+  var header = screen ? screen.querySelector('.game-header') : null;
+  var ctrl = screen ? screen.querySelector('.blocks-ctrl') : null;
+  var pad = 16;
+  var headerH = header ? 100 : 88;
+  var ctrlH = ctrl ? 72 : 64;
+  var usedH = pad + headerH + ctrlH;
+  INV_W = Math.min(960, Math.max(320, Math.floor(window.innerWidth - pad)));
+  INV_H = Math.min(640, Math.max(280, Math.floor(window.innerHeight - usedH)));
   var csW = INV_W / 18;
-  var csH = INV_H / 11;
-  INV_CELL = Math.max(14, Math.floor(Math.min(csW, csH)));
+  var csH = INV_H / 13;
+  INV_CELL = Math.max(16, Math.floor(Math.min(csW, csH)));
+}
+function invApplyCanvasSize() {
+  if (!invCv) return;
+  invCv.width = INV_W;
+  invCv.height = INV_H;
+  invCv.style.width = INV_W + 'px';
+  invCv.style.height = INV_H + 'px';
 }
 
 function initInvaders() {
@@ -1430,39 +1436,41 @@ function newInvGame() {
   invLevel = 1;
   invSize();
   if (!invCv) return;
-  invCv.width = INV_W;
-  invCv.height = INV_H;
+  invApplyCanvasSize();
   setupInvLevel();
 }
 
 function setupInvLevel() {
   var cs = INV_CELL;
-  // Player
-  invPlayer = {x: INV_W/2, y: INV_H - cs*1.5, w: cs*2, h: cs, speed: INV_W*0.007};
-  invBullets = []; invEnemyBullets = [];
-
-  // Aliens grid: 5 rows x 11 cols
-  invAliens = [];
   var rows = 5, cols = 11;
-  var startX = (INV_W - cols*(cs*1.6)) / 2;
-  for (var r=0;r<rows;r++) {
-    for (var c=0;c<cols;c++) {
+  var rowStep = cs * 1.35;
+  var playerY = INV_H - cs * 2.2;
+  var barrierY = playerY - cs * 2.2;
+  var alienStartY = cs * 1.2;
+
+  invPlayer = {x: INV_W / 2 - cs, y: playerY, w: cs * 2, h: cs, speed: Math.max(3, INV_W * 0.006)};
+  invBullets = [];
+  invEnemyBullets = [];
+
+  invAliens = [];
+  var startX = (INV_W - cols * (cs * 1.55)) / 2;
+  for (var r = 0; r < rows; r++) {
+    for (var c = 0; c < cols; c++) {
       invAliens.push({
-        x: startX + c*(cs*1.6),
-        y: cs*2 + r*(cs*1.4),
-        w: cs*1.1, h: cs*0.9,
+        x: startX + c * (cs * 1.55),
+        y: alienStartY + r * rowStep,
+        w: cs * 1.05, h: cs * 0.85,
         row: r, alive: true,
         frame: 0
       });
     }
   }
 
-  // Barriers
   invBarriers = [];
   var bCount = 4;
-  for (var b=0;b<bCount;b++) {
-    var bx = (INV_W / (bCount+1)) * (b+1) - cs;
-    invBarriers.push({x:bx, y:INV_H-cs*4, w:cs*2, h:cs, hp:5});
+  for (var b = 0; b < bCount; b++) {
+    var bx = (INV_W / (bCount + 1)) * (b + 1) - cs;
+    invBarriers.push({x: bx, y: barrierY, w: cs * 2, h: cs * 0.9, hp: 5});
   }
 
   invAlienDir = 1; invAlienSpeed = 500 - invLevel*30;
@@ -1619,9 +1627,10 @@ function startInvTimers() {
     invAliens.forEach(function(a){
       if (!a.alive) return;
       if (drop) a.y += invDropDist;
-      else a.x += invAlienDir * INV_CELL * 0.7;
+      else a.x += invAlienDir * INV_CELL * 0.55;
     });
-  }, Math.max(120, 500-(invLevel-1)*40));
+    drawInvaders();
+  }, Math.max(200, 600 - (invLevel - 1) * 35));
 
   invShootLoop = setInterval(function(){
     if (!invRunning || !invAliens) return;
