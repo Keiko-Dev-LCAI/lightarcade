@@ -1407,11 +1407,16 @@ function initInvaders() {
   invCtx = invCv.getContext('2d');
   setTimeout(function() {
     var rect = invCv.getBoundingClientRect();
-    INV_W = Math.max(320, Math.floor(rect.width  || window.innerWidth  - 20));
-    INV_H = Math.max(260, Math.floor(rect.height || window.innerHeight - 200));
-    INV_CELL = Math.max(20, Math.min(38, Math.floor(Math.min(INV_W / 18, INV_H / 12))));
+    // Target a playable game size — not full screen, not tiny
+    var maxW = Math.min(window.innerWidth - 20, 820);
+    var maxH = Math.min(window.innerHeight - 180, 560);
+    INV_W = Math.max(320, maxW);
+    INV_H = Math.max(260, maxH);
+    INV_CELL = Math.max(24, Math.floor(Math.min(INV_W / 14, INV_H / 10)));
     invCv.width  = INV_W;
     invCv.height = INV_H;
+    invCv.style.width  = INV_W + 'px';
+    invCv.style.height = INV_H + 'px';
     newInvGame();
   }, 120);
 }
@@ -1425,11 +1430,15 @@ function newInvGame() {
   if (invCv) {
     var rect = invCv.getBoundingClientRect();
     if (rect.width > 80) {
-      INV_W = Math.floor(rect.width);
-      INV_H = Math.floor(rect.height);
-      INV_CELL = Math.max(20, Math.min(38, Math.floor(Math.min(INV_W / 18, INV_H / 12))));
+      var maxW2 = Math.min(window.innerWidth - 20, 820);
+      var maxH2 = Math.min(window.innerHeight - 180, 560);
+      INV_W = Math.max(320, maxW2);
+      INV_H = Math.max(260, maxH2);
+      INV_CELL = Math.max(24, Math.floor(Math.min(INV_W / 14, INV_H / 10)));
       invCv.width  = INV_W;
       invCv.height = INV_H;
+      invCv.style.width  = INV_W + 'px';
+      invCv.style.height = INV_H + 'px';
     }
   }
   setupInvLevel();
