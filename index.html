@@ -1382,7 +1382,13 @@ window.addEventListener('resize', function(){
   if(cur==='chess') drawBoard();
   if(cur==='lightblocks'&&bCv) initBlocks();
   if(cur==='minesweeper') drawMines();
-  if(cur==='invaders'&&invCv) initInvaders();
+  if(cur==='invaders'&&invCv) {
+    invSize();
+    invCv.width = INV_W;
+    invCv.height = INV_H;
+    if (invRunning) setupInvLevel();
+    else drawInvaders();
+  }
   if(cur==='sudoku') renderSudoku();
 });
 
@@ -1397,31 +1403,35 @@ var INV_W, INV_H, INV_CELL;
 
 function invSize() {
   var body = document.querySelector('#invaders .inv-body');
-  var header = document.querySelector('#invaders .game-header');
-  var ctrl = document.querySelector('#invaders .blocks-ctrl');
   var bw = window.innerWidth - 16;
   var bh = window.innerHeight - 24;
-  if (header) bh -= header.offsetHeight;
-  if (ctrl) bh -= ctrl.offsetHeight;
-  if (body && body.clientWidth > 80) bw = body.clientWidth;
-  if (body && body.clientHeight > 80) bh = body.clientHeight;
+  if (body && body.clientWidth > 80) bw = body.clientWidth - 8;
+  if (body && body.clientHeight > 80) bh = body.clientHeight - 8;
   INV_W = Math.max(320, Math.floor(bw));
-  INV_H = Math.max(240, Math.floor(bh));
-  INV_CELL = Math.max(14, Math.floor(INV_W / 18));
+  INV_H = Math.max(280, Math.floor(bh));
+  // Scale cells to fit BOTH width (11 cols) and height (5 rows + player zone)
+  var csW = INV_W / 18;
+  var csH = INV_H / 11;
+  INV_CELL = Math.max(14, Math.floor(Math.min(csW, csH)));
 }
 
 function initInvaders() {
   invCv = document.getElementById('inv-canvas');
+  if (!invCv) return;
   invCtx = invCv.getContext('2d');
-  invSize();
-  invCv.width = INV_W;
-  invCv.height = INV_H;
   newInvGame();
 }
 
 function newInvGame() {
   closeOv();
-  invScore=0; invLives=3; invLevel=1;
+  stopInvaders();
+  invScore = 0;
+  invLives = 3;
+  invLevel = 1;
+  invSize();
+  if (!invCv) return;
+  invCv.width = INV_W;
+  invCv.height = INV_H;
   setupInvLevel();
 }
 
@@ -1463,6 +1473,7 @@ function setupInvLevel() {
   invLoop = setInterval(invFrame, 16);
   startInvTimers();
   document.getElementById('inv-score-hdr').textContent = 'Score: ' + invScore;
+  drawInvaders();
 }
 
 function invFrame() {
