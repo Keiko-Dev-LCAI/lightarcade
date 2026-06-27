@@ -30,38 +30,65 @@ body {
   display: flex;
   flex-direction: column;
 }
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse at 15% 10%, rgba(124,58,237,0.18), transparent 55%),
+    radial-gradient(ellipse at 85% 90%, rgba(6,182,212,0.14), transparent 55%);
+  animation: hubPulse 10s ease-in-out infinite alternate;
+}
+@keyframes hubPulse { from { opacity: 0.65; } to { opacity: 1; } }
+.screen { position: relative; z-index: 1; }
 
 .screen { display: none; width: 100%; height: 100dvh; flex-direction: column; overflow: hidden; }
 .screen.active { display: flex; }
 
 /* ===== HUB ===== */
-#hub { align-items: stretch; justify-content: flex-start; gap: 0; padding: 40px 32px 32px 32px; overflow-y: auto; }
+#hub {
+  align-items: stretch; justify-content: flex-start; gap: 0;
+  padding: clamp(16px, 4vw, 40px) clamp(12px, 3vw, 32px);
+  overflow-y: auto;
+}
 
 .hub-title {
-  font-size: 180px; font-weight: 900; letter-spacing: -5px;
+  font-size: clamp(42px, 11vw, 110px); font-weight: 900; letter-spacing: -2px;
   background: linear-gradient(135deg, var(--purple-light), var(--teal));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  text-align: center; line-height: 1;
+  background-clip: text; text-align: center; line-height: 1.05;
 }
-.hub-sub { font-size: 72px; color: var(--text-dim); text-align: center; margin-top: -10px; margin-bottom: 192px; }
+.hub-sub {
+  font-size: clamp(16px, 3.5vw, 32px); color: var(--text-dim);
+  text-align: center; margin-top: 4px; margin-bottom: clamp(20px, 5vw, 48px);
+}
 
-.game-cards { display: flex; flex-direction: column; gap: 22px; width: 100%; }
+.game-cards {
+  display: grid; grid-template-columns: 1fr;
+  gap: clamp(10px, 2vw, 18px); width: 100%; max-width: 1100px; margin: 0 auto;
+}
+@media (min-width: 720px) {
+  .game-cards { grid-template-columns: 1fr 1fr; }
+}
 
 .game-card {
   background: var(--card); border: 1px solid rgba(124,58,237,0.3);
-  border-radius: 24px; padding: 36px 40px;
-  display: flex; align-items: center; gap: 30px;
-  cursor: pointer; transition: border-color 0.15s; touch-action: manipulation;
+  border-radius: clamp(14px, 2vw, 22px);
+  padding: clamp(14px, 3vw, 28px) clamp(16px, 3vw, 32px);
+  display: flex; align-items: center; gap: clamp(12px, 2vw, 24px);
+  cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
+  touch-action: manipulation;
 }
+.game-card:hover { border-color: var(--purple-light); box-shadow: 0 0 24px rgba(124,58,237,0.2); }
 .game-card:active { border-color: var(--purple); transform: scale(0.98); }
-.game-icon { font-size: 80px; }
-.game-info { flex: 1; }
-.game-name { font-size: 52px; font-weight: 700; }
-.game-desc { font-size: 34px; color: var(--text-dim); margin-top: 6px; }
+.game-icon { font-size: clamp(36px, 7vw, 64px); flex-shrink: 0; }
+.game-info { flex: 1; min-width: 0; }
+.game-name { font-size: clamp(20px, 4vw, 36px); font-weight: 700; }
+.game-desc { font-size: clamp(13px, 2.5vw, 20px); color: var(--text-dim); margin-top: 4px; }
+.game-best { font-size: clamp(11px, 2vw, 16px); color: var(--gold); margin-top: 4px; font-weight: 600; }
 .play-btn {
   background: var(--purple); color: white; border: none;
-  border-radius: 14px; padding: 20px 44px;
-  font-size: 38px; font-weight: 700; cursor: pointer; touch-action: manipulation;
+  border-radius: 12px; padding: clamp(10px, 2vw, 16px) clamp(18px, 3vw, 32px);
+  font-size: clamp(15px, 2.8vw, 26px); font-weight: 700;
+  cursor: pointer; touch-action: manipulation; flex-shrink: 0;
 }
 
 /* ===== SHARED HEADER ===== */
@@ -209,6 +236,34 @@ body {
 .mine-cell[data-n="8"] { color: #607d8b; }
 .mines-hint { font-size: 26px; color: var(--text-dim); text-align: center; }
 
+/* ===== LIGHT RUNNER ===== */
+.runner-body {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 8px; gap: 10px; overflow: hidden;
+}
+#run-canvas {
+  border: 2px solid var(--purple); border-radius: 8px;
+  display: block; max-width: 100%; background: #0d0d22;
+  touch-action: manipulation;
+}
+.runner-hud {
+  display: flex; gap: 24px; font-size: clamp(18px, 3vw, 28px); font-weight: 700;
+}
+.runner-hud .score { color: var(--teal); }
+.runner-hud .best { color: var(--gold); }
+.runner-ctrl {
+  display: flex; gap: 12px; width: 100%; max-width: 520px; justify-content: center;
+}
+.runner-jump {
+  flex: 1; max-width: 280px; background: linear-gradient(135deg, var(--purple), var(--teal));
+  color: #000; border: none; border-radius: 14px;
+  padding: clamp(14px, 3vw, 22px); font-size: clamp(18px, 4vw, 28px);
+  font-weight: 800; cursor: pointer; touch-action: manipulation;
+}
+.runner-jump:active { opacity: 0.85; transform: scale(0.98); }
+.runner-hint { font-size: clamp(12px, 2.5vw, 18px); color: var(--text-dim); text-align: center; }
+
 /* ===== OVERLAY ===== */
 .overlay {
   display: none; position: fixed; inset: 0;
@@ -242,11 +297,21 @@ body {
       </div>
       <button class="play-btn">Play</button>
     </div>
+    <div class="game-card" onclick="go('runner')">
+      <div class="game-icon">🏃</div>
+      <div class="game-info">
+        <div class="game-name">Light Runner</div>
+        <div class="game-desc">Jump obstacles — endless run</div>
+        <div class="game-best" id="hs-runner">Best: —</div>
+      </div>
+      <button class="play-btn">Play</button>
+    </div>
     <div class="game-card" onclick="go('lightblocks')">
       <div class="game-icon">🟦</div>
       <div class="game-info">
         <div class="game-name">LightBlocks</div>
         <div class="game-desc">Classic falling blocks game</div>
+        <div class="game-best" id="hs-lightblocks">Best: —</div>
       </div>
       <button class="play-btn">Play</button>
     </div>
@@ -263,6 +328,7 @@ body {
       <div class="game-info">
         <div class="game-name">Light Invaders</div>
         <div class="game-desc">Shoot the alien grid before they land</div>
+        <div class="game-best" id="hs-invaders">Best: —</div>
       </div>
       <button class="play-btn">Play</button>
     </div>
@@ -279,6 +345,7 @@ body {
       <div class="game-info">
         <div class="game-name">Blackjack</div>
         <div class="game-desc">Beat the dealer to 21</div>
+        <div class="game-best" id="hs-blackjack">Chips: —</div>
       </div>
       <button class="play-btn">Play</button>
     </div>
@@ -363,6 +430,25 @@ body {
     </div>
     <div id="mines-grid"></div>
     <div class="mines-hint">Tap = reveal · Hold = flag</div>
+  </div>
+</div>
+
+<!-- ===== LIGHT RUNNER ===== -->
+<div id="runner" class="screen">
+  <div class="game-header">
+    <button class="back-btn" onclick="go('hub'); stopRunner()">← Back</button>
+    <div class="game-title-bar">🏃 Light Runner</div>
+  </div>
+  <div class="runner-body">
+    <div class="runner-hud">
+      <span class="score">Score: <span id="run-score">0</span></span>
+      <span class="best">Best: <span id="run-best">0</span></span>
+    </div>
+    <canvas id="run-canvas"></canvas>
+    <div class="runner-ctrl">
+      <button class="runner-jump" onclick="runJump()">⬆ Jump</button>
+    </div>
+    <div class="runner-hint">Space / tap / Jump button · dodge purple blocks</div>
   </div>
 </div>
 
@@ -459,18 +545,57 @@ body {
 
 <script>
 // =============================================
+// PERSISTENCE (high scores + blackjack chips)
+// =============================================
+var HS_KEYS = { lightblocks:'la_hs_lightblocks', invaders:'la_hs_invaders', runner:'la_hs_runner' };
+var BJ_CHIPS_KEY = 'la_bj_chips';
+
+function getHS(key) {
+  var v = parseInt(localStorage.getItem(HS_KEYS[key]) || '0', 10);
+  return isNaN(v) ? 0 : v;
+}
+function setHS(key, score) {
+  var cur = getHS(key);
+  if (score > cur) {
+    localStorage.setItem(HS_KEYS[key], String(score));
+    refreshHubScores();
+    return true;
+  }
+  return false;
+}
+function getBJChips() {
+  var v = parseInt(localStorage.getItem(BJ_CHIPS_KEY) || '1000', 10);
+  return isNaN(v) || v < 0 ? 1000 : v;
+}
+function saveBJChips() { localStorage.setItem(BJ_CHIPS_KEY, String(bjChips)); refreshHubScores(); }
+
+function refreshHubScores() {
+  var lb = document.getElementById('hs-lightblocks');
+  var inv = document.getElementById('hs-invaders');
+  var run = document.getElementById('hs-runner');
+  var bj = document.getElementById('hs-blackjack');
+  if (lb) lb.textContent = 'Best: ' + getHS('lightblocks');
+  if (inv) inv.textContent = 'Best: ' + getHS('invaders');
+  if (run) run.textContent = 'Best: ' + getHS('runner');
+  if (bj) bj.textContent = 'Chips: ' + getBJChips();
+}
+
+// =============================================
 // NAVIGATION
 // =============================================
 var cur = 'hub';
 var ovFn = null;
 
 function go(id) {
+  if (cur === 'runner' && id !== 'runner') stopRunner();
   document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
   cur = id;
+  if (id === 'hub') refreshHubScores();
   if (id === 'chess' && !cGame) initChess();
   if (id === 'lightblocks') initBlocks();
   if (id === 'minesweeper') initMines();
+  if (id === 'runner') initRunner();
   if (id === 'invaders') initInvaders();
   if (id === 'sudoku') initSudoku();
   if (id === 'blackjack') initBlackjack();
@@ -883,7 +1008,9 @@ function spawnBlock() {
   drawNext();
   if (!canB(bCur.mat, bCur.x, bCur.y)) {
     clearInterval(bLoop); bRunning=false;
-    setTimeout(function(){ showOv('Game Over','Score: '+bScore,'Play Again',newBlocks); },300);
+    var newBest = setHS('lightblocks', bScore);
+    var sub = 'Score: '+bScore + (newBest ? ' · New best!' : ' · Best: '+getHS('lightblocks'));
+    setTimeout(function(){ showOv('Game Over', sub, 'Play Again', newBlocks); },300);
   }
 }
 
@@ -1199,7 +1326,158 @@ window.addEventListener('resize', function(){
   if(cur==='chess') drawBoard();
   if(cur==='lightblocks'&&bCv) initBlocks();
   if(cur==='minesweeper') drawMines();
+  if(cur==='runner'&&runCv) initRunner();
   if(cur==='invaders'&&invCv) initInvaders();
+});
+
+// =============================================
+// LIGHT RUNNER
+// =============================================
+var runCv, runCtx, runLoop, runRunning=false;
+var runW, runH, runGround, runPlayer, runObstacles;
+var runScore, runSpeed, runSpawnTimer, runFrame;
+
+function initRunner() {
+  runCv = document.getElementById('run-canvas');
+  runCtx = runCv.getContext('2d');
+  runW = Math.min(window.innerWidth - 24, 640);
+  runH = Math.min(window.innerHeight - 280, 280);
+  runCv.width = runW;
+  runCv.height = runH;
+  newRunner();
+}
+
+function newRunner() {
+  closeOv();
+  runGround = runH - 36;
+  var ph = Math.floor(runH * 0.18);
+  runPlayer = { x: 48, y: runGround - ph, w: 28, h: ph, vy: 0, grounded: true };
+  runObstacles = [];
+  runScore = 0;
+  runSpeed = runW * 0.006;
+  runSpawnTimer = 0;
+  runFrame = 0;
+  runRunning = true;
+  document.getElementById('run-score').textContent = '0';
+  document.getElementById('run-best').textContent = getHS('runner');
+  clearInterval(runLoop);
+  runLoop = setInterval(runStep, 16);
+  drawRunner();
+}
+
+function runJump() {
+  if (!runRunning || !runPlayer.grounded) return;
+  runPlayer.vy = -runH * 0.095;
+  runPlayer.grounded = false;
+}
+
+function runStep() {
+  if (!runRunning) return;
+  runFrame++;
+  runScore += 1;
+  if (runFrame % 120 === 0) runSpeed = Math.min(runW * 0.014, runSpeed + runW * 0.0004);
+
+  runPlayer.vy += runH * 0.006;
+  runPlayer.y += runPlayer.vy;
+  if (runPlayer.y >= runGround - runPlayer.h) {
+    runPlayer.y = runGround - runPlayer.h;
+    runPlayer.vy = 0;
+    runPlayer.grounded = true;
+  }
+
+  runSpawnTimer--;
+  if (runSpawnTimer <= 0) {
+    var tall = Math.random() < 0.35;
+    var oh = tall ? Math.floor(runPlayer.h * 1.1) : Math.floor(runPlayer.h * 0.55);
+    var ow = Math.floor(18 + Math.random() * 14);
+    runObstacles.push({ x: runW + 10, w: ow, h: oh, y: runGround - oh });
+    runSpawnTimer = Math.floor(70 + Math.random() * 90 - runScore * 0.02);
+    if (runSpawnTimer < 35) runSpawnTimer = 35;
+  }
+
+  runObstacles.forEach(function(o){ o.x -= runSpeed; });
+  runObstacles = runObstacles.filter(function(o){ return o.x + o.w > -20; });
+
+  var px = runPlayer.x + 4, py = runPlayer.y + 4;
+  var pw = runPlayer.w - 8, ph = runPlayer.h - 6;
+  for (var i = 0; i < runObstacles.length; i++) {
+    var o = runObstacles[i];
+    if (px < o.x + o.w && px + pw > o.x && py < o.y + o.h && py + ph > o.y) {
+      runOver();
+      return;
+    }
+  }
+
+  document.getElementById('run-score').textContent = runScore;
+  drawRunner();
+}
+
+function drawRunner() {
+  var ctx = runCtx, W = runW, H = runH;
+  ctx.fillStyle = '#0d0d22';
+  ctx.fillRect(0, 0, W, H);
+
+  // Ground
+  ctx.fillStyle = '#1a1a35';
+  ctx.fillRect(0, runGround, W, H - runGround);
+  ctx.strokeStyle = 'rgba(124,58,237,0.5)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(0, runGround);
+  ctx.lineTo(W, runGround);
+  ctx.stroke();
+
+  // Speed lines
+  ctx.strokeStyle = 'rgba(6,182,212,0.15)';
+  for (var i = 0; i < 6; i++) {
+    var lx = ((runFrame * 3 + i * 90) % (W + 80)) - 40;
+    ctx.beginPath();
+    ctx.moveTo(lx, runGround - 8 - i * 6);
+    ctx.lineTo(lx + 30, runGround - 8 - i * 6);
+    ctx.stroke();
+  }
+
+  // Obstacles
+  runObstacles.forEach(function(o) {
+    var grd = ctx.createLinearGradient(o.x, o.y, o.x + o.w, o.y + o.h);
+    grd.addColorStop(0, '#a855f7');
+    grd.addColorStop(1, '#7c3aed');
+    ctx.fillStyle = grd;
+    ctx.fillRect(o.x, o.y, o.w, o.h);
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.fillRect(o.x + 2, o.y + 2, o.w - 4, 4);
+  });
+
+  // Player (lightning bolt runner)
+  var px = runPlayer.x, py = runPlayer.y, pw = runPlayer.w, ph = runPlayer.h;
+  var pgrd = ctx.createLinearGradient(px, py, px, py + ph);
+  pgrd.addColorStop(0, '#06b6d4');
+  pgrd.addColorStop(1, '#7c3aed');
+  ctx.fillStyle = pgrd;
+  ctx.fillRect(px, py, pw, ph);
+  ctx.font = Math.floor(ph * 0.7) + 'px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('\u26A1', px + pw / 2, py + ph / 2);
+}
+
+function runOver() {
+  runRunning = false;
+  clearInterval(runLoop);
+  var nb = setHS('runner', runScore);
+  document.getElementById('run-best').textContent = getHS('runner');
+  var sub = 'Score: ' + runScore + (nb ? ' · New best!' : ' · Best: ' + getHS('runner'));
+  setTimeout(function(){ showOv('\u{1F4A5} Crashed!', sub, 'Run Again', newRunner); }, 300);
+}
+
+function stopRunner() {
+  runRunning = false;
+  clearInterval(runLoop);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (cur !== 'runner') return;
+  if (e.key === ' ' || e.key === 'ArrowUp') { e.preventDefault(); runJump(); }
 });
 
 // =============================================
@@ -1311,7 +1589,12 @@ function invFrame() {
     if (b.hit) return;
     if (b.x>invPlayer.x && b.x<invPlayer.x+invPlayer.w && b.y>invPlayer.y && b.y<invPlayer.y+invPlayer.h) {
       b.hit=true; invLives--;
-      if (invLives<=0) { invRunning=false; clearInterval(invLoop); setTimeout(function(){ showOv('\u{1F4A5} Game Over','Score: '+invScore,'Play Again',newInvGame); },400); }
+      if (invLives<=0) {
+        invRunning=false; clearInterval(invLoop);
+        var nb = setHS('invaders', invScore);
+        var sub2 = 'Score: '+invScore + (nb ? ' · New best!' : ' · Best: '+getHS('invaders'));
+        setTimeout(function(){ showOv('\u{1F4A5} Game Over', sub2, 'Play Again', newInvGame); },400);
+      }
     }
   });
   invEnemyBullets = invEnemyBullets.filter(function(b){ return !b.hit; });
@@ -1334,7 +1617,9 @@ function invFrame() {
   var bottomAlien = Math.max.apply(null, anyAlive.map(function(a){ return a.y+a.h; }));
   if (bottomAlien >= invPlayer.y) {
     invRunning=false; clearInterval(invLoop);
-    setTimeout(function(){ showOv('\u{1F4A5} Invaded!','The aliens landed! Score: '+invScore,'Play Again',newInvGame); },300);
+    var nb2 = setHS('invaders', invScore);
+    var sub3 = 'The aliens landed! Score: '+invScore + (nb2 ? ' · New best!' : ' · Best: '+getHS('invaders'));
+    setTimeout(function(){ showOv('\u{1F4A5} Invaded!', sub3, 'Play Again', newInvGame); },300);
     return;
   }
 
@@ -1599,7 +1884,9 @@ var SUITS=['♥','♦','♣','♠'];
 var RANKS=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
 
 function initBlackjack() {
-  bjChips=1000; bjBetAmt=0; bjPlaying=false;
+  bjChips = getBJChips();
+  if (bjChips <= 0) bjChips = 500;
+  bjBetAmt=0; bjPlaying=false;
   updateBJHdr();
   document.getElementById('bj-bet-show').textContent='Bet: 0';
   document.getElementById('bj-result').textContent='';
@@ -1697,9 +1984,14 @@ function bjEnd(result) {
   var el=document.getElementById('bj-result');
   el.textContent=msg; el.style.color=color;
   updateBJHdr();
+  saveBJChips();
 
   if (bjChips<=0) {
-    setTimeout(function(){ showOv('\u{1F4B8} Broke!','You ran out of chips.','Play Again',initBlackjack); },600);
+    setTimeout(function(){
+      showOv('\u{1F4B8} Broke!','+500 fun chips to keep playing.','Play Again',function(){
+        bjChips=500; saveBJChips(); updateBJHdr(); initBlackjack();
+      });
+    },600);
     return;
   }
   bjBetAmt=0;
@@ -1716,6 +2008,8 @@ function showBJBtns(mode) {
 }
 
 function newBJGame() { initBlackjack(); }
+
+refreshHubScores();
 
 </script>
 
