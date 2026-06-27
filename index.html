@@ -57,7 +57,7 @@ body {
 .game-info { flex: 1; }
 .game-name { font-size: 52px; font-weight: 700; }
 .game-desc { font-size: 34px; color: var(--text-dim); margin-top: 6px; }
-.game-best { font-size: 28px; color: var(--gold); margin-top: 6px; font-weight: 600; }
+.game-best { font-size: 44px; color: var(--gold); margin-top: 8px; font-weight: 600; }
 .play-btn {
   background: var(--purple); color: white; border: none;
   border-radius: 14px; padding: 20px 44px;
@@ -77,6 +77,27 @@ body {
 }
 .back-btn:active { background: var(--purple); }
 .game-title-bar { font-size: 34px; font-weight: 700; flex: 1; }
+
+/* ===== GLOBAL LARGE UI (every game screen) ===== */
+.screen:not(#hub) .game-header { padding: 28px 36px; gap: 24px; flex-shrink: 0; }
+.screen:not(#hub) .back-btn {
+  font-size: 104px; padding: 40px 72px; border-radius: 20px; border-width: 3px;
+}
+.screen:not(#hub) .game-title-bar { font-size: 136px; }
+.screen:not(#hub) .chess-btn {
+  font-size: 112px; padding: 40px 72px; border-radius: 20px; border-width: 3px;
+}
+.screen:not(#hub) .blocks-ctrl { gap: 16px; padding: 20px 24px; flex-shrink: 0; }
+.screen:not(#hub) .ctrl-btn {
+  border-radius: 16px; padding: 28px 0; font-size: 56px; border-width: 2px;
+}
+.game-body {
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  padding: 20px 16px 28px; gap: 20px;
+  overflow-y: auto; overflow-x: hidden;
+}
 
 /* ===== CHESS ===== */
 .chess-body {
@@ -142,6 +163,16 @@ body {
 .cdiff-btn.on { background: var(--purple); color: white; }
 .cdiff-btn:active { background: var(--purple); color: white; }
 
+#chess .chess-body {
+  align-items: center; justify-content: flex-start;
+  overflow-y: auto; overflow-x: hidden; min-height: 0;
+}
+#chess .chess-status { font-size: 56px; padding: 20px 40px; border-radius: 16px; flex-shrink: 0; }
+#chess .chess-diff-row { gap: 16px; flex-shrink: 0; flex-wrap: wrap; justify-content: center; }
+#chess .cdiff-btn { font-size: 48px; padding: 20px 36px; border-radius: 14px; }
+#chess .chess-btns { gap: 20px; flex-shrink: 0; flex-wrap: wrap; justify-content: center; }
+#chess #chess-board { flex-shrink: 0; border-width: 4px; }
+
 /* ===== LIGHTBLOCKS ===== */
 .blocks-body {
   flex: 1; display: flex; align-items: center; justify-content: center;
@@ -169,6 +200,23 @@ body {
 .ctrl-btn:active { background: var(--purple); }
 .ctrl-drop { grid-column: 1 / 4; background: rgba(124,58,237,0.25); font-size: 20px; padding: 12px; }
 .ctrl-drop:active { background: var(--purple); }
+
+#lightblocks .blocks-body {
+  flex: 1; min-height: 0; flex-direction: row;
+  align-items: flex-start; justify-content: center;
+  gap: 28px; padding: 20px; overflow-y: auto; overflow-x: hidden;
+}
+#lightblocks .blocks-side { gap: 20px; min-width: 300px; flex-shrink: 0; }
+#lightblocks .blocks-stat {
+  border-radius: 16px; padding: 20px; border-width: 2px;
+}
+#lightblocks .stat-label { font-size: 48px; letter-spacing: 2px; }
+#lightblocks .stat-val { font-size: 80px; margin-top: 8px; }
+#lightblocks #next-canvas {
+  width: 144px; height: 144px; border-width: 2px; border-radius: 12px;
+}
+#lightblocks #blocks-canvas { border-width: 4px; border-radius: 8px; flex-shrink: 0; }
+#lightblocks .ctrl-drop { font-size: 48px; padding: 24px; }
 
 /* ===== MINESWEEPER ===== */
 .mines-body {
@@ -209,6 +257,46 @@ body {
 .mine-cell[data-n="8"] { color: #607d8b; }
 .mines-hint { font-size: 26px; color: var(--text-dim); text-align: center; }
 
+#minesweeper .mines-body {
+  flex: 1; min-height: 0; align-items: center;
+  justify-content: flex-start;
+  padding: 24px 20px 32px; gap: 24px;
+  overflow-y: auto; overflow-x: hidden;
+}
+#minesweeper .mines-hud { gap: 48px; font-size: 72px; }
+#minesweeper .mines-face { font-size: 96px; }
+#minesweeper .mines-diffs { gap: 24px; flex-shrink: 0; }
+#minesweeper .diff-btn {
+  padding: 24px 56px; border-radius: 16px; font-size: 56px; border-width: 2px;
+}
+#minesweeper #mines-grid { gap: 4px; flex-shrink: 0; }
+#minesweeper .mine-cell { border-radius: 6px; }
+#minesweeper .mines-hint { font-size: 48px; flex-shrink: 0; }
+
+/* ===== BLACKJACK (large UI) ===== */
+#blackjack .bj-body {
+  flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center;
+  justify-content: flex-start; padding: 48px 40px; gap: 32px; overflow-y: auto;
+}
+#blackjack #bj-chips-hdr { font-size: 72px; font-weight: 700; color: var(--gold); flex-shrink: 0; white-space: nowrap; }
+#blackjack .bj-zone { text-align: center; width: 100%; }
+#blackjack .bj-label { font-size: 144px; font-weight: 700; color: var(--text-dim); margin-bottom: 20px; }
+#blackjack .bj-cards { font-size: 360px; letter-spacing: 20px; line-height: 1; }
+#blackjack .bj-val-gold { font-size: 136px; font-weight: 700; color: var(--gold); margin-top: 12px; }
+#blackjack .bj-val-teal { font-size: 136px; font-weight: 700; color: var(--teal); margin-top: 12px; }
+#blackjack .bj-divider { width: 100%; border-top: 4px solid rgba(124,58,237,0.3); }
+#blackjack #bj-result { font-size: 144px; font-weight: 900; text-align: center; min-height: 160px; }
+
+#blackjack #bj-bet-row { display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; align-items: center; }
+#blackjack .bj-bet-lbl { font-size: 120px; font-weight: 700; color: var(--text-dim); }
+#blackjack .bj-chip-btn { font-size: 104px; padding: 36px 72px; }
+#blackjack .bj-chip-clear { background: var(--red); }
+#blackjack #bj-bet-show { font-size: 136px; font-weight: 700; color: var(--purple-light); text-align: center; }
+#blackjack #bj-actions { display: flex; gap: 48px; flex-wrap: wrap; justify-content: center; }
+#blackjack .bj-action-btn { font-size: 128px; padding: 56px 180px; }
+#blackjack #bj-hit-btn { background: var(--teal); }
+#blackjack #bj-stand-btn { background: #555; }
+
 /* ===== LIGHT RUNNER ===== */
 .runner-body {
   flex: 1; display: flex; flex-direction: column;
@@ -235,19 +323,45 @@ body {
 .runner-jump:active { opacity: 0.85; transform: scale(0.98); }
 .runner-hint { font-size: 26px; color: var(--text-dim); text-align: center; flex-shrink: 0; }
 
+#runner .runner-body {
+  flex: 1; min-height: 0; justify-content: flex-start;
+  padding: 20px 16px 28px; gap: 20px; overflow-y: auto;
+}
+#runner .runner-hud { font-size: 72px; gap: 48px; flex-shrink: 0; }
+#runner .runner-jump { font-size: 64px; padding: 32px 120px; border-radius: 20px; }
+#runner .runner-hint { font-size: 48px; }
+#runner #run-canvas { min-height: 160px; max-height: 70vh; }
+
+#invaders .inv-score-hdr {
+  font-size: 72px; font-weight: 700; color: var(--teal);
+  flex-shrink: 0; white-space: nowrap;
+}
+#invaders .inv-body { align-items: center; justify-content: center; }
+#invaders #inv-canvas { border-width: 4px; border-radius: 8px; flex-shrink: 0; }
+
+#sudoku #sdk-grid { flex-shrink: 0; border-width: 4px; }
+#sudoku #sdk-numpad { gap: 16px; flex-shrink: 0; width: 100%; max-width: 900px; }
+#sudoku #sdk-numpad .ctrl-btn { font-size: 64px; padding: 24px 0; }
+#sudoku .sdk-hint {
+  font-size: 48px; color: var(--text-dim); text-align: center;
+  line-height: 1.5; flex-shrink: 0; padding: 0 12px;
+}
+#sudoku #sdk-status { font-size: 64px; color: var(--text-dim); text-align: center; flex-shrink: 0; }
+
 /* ===== OVERLAY ===== */
 .overlay {
   display: none; position: fixed; inset: 0;
   background: rgba(0,0,0,0.88); z-index: 200;
-  flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 32px; padding: 32px 20px; overflow-y: auto;
 }
 .overlay.on { display: flex; }
-.ov-title { font-size: 56px; font-weight: 900; text-align: center; }
-.ov-sub   { font-size: 34px; color: var(--text-dim); text-align: center; }
+.ov-title { font-size: 120px; font-weight: 900; text-align: center; padding: 0 24px; }
+.ov-sub   { font-size: 72px; color: var(--text-dim); text-align: center; padding: 0 24px; }
 .ov-btn {
   background: var(--purple); color: white; border: none;
-  padding: 18px 50px; border-radius: 14px;
-  font-size: 32px; font-weight: 700; cursor: pointer; touch-action: manipulation;
+  padding: 40px 100px; border-radius: 20px;
+  font-size: 80px; font-weight: 700; cursor: pointer; touch-action: manipulation;
 }
 .ov-btn.ghost { background: var(--surface); border: 1px solid var(--purple); }
 .ov-btn:active { opacity: 0.8; }
@@ -329,7 +443,7 @@ body {
     <button class="back-btn" onclick="go('hub')">← Back</button>
     <div class="game-title-bar">♟️ Chess</div>
   </div>
-  <div class="chess-body">
+  <div class="chess-body game-body">
     <div class="chess-status white" id="cstatus">Your turn — White</div>
     <div id="chess-board"></div>
     <div class="chess-diff-row">
@@ -359,7 +473,7 @@ body {
     <div class="blocks-side">
       <div class="blocks-stat">
         <div class="stat-label">Next</div>
-        <canvas id="next-canvas" width="72" height="72"></canvas>
+        <canvas id="next-canvas" width="144" height="144"></canvas>
       </div>
       <div class="blocks-stat">
         <div class="stat-label">Score</div>
@@ -428,10 +542,10 @@ body {
   <div class="game-header">
     <button class="back-btn" onclick="go('hub'); stopInvaders()">← Back</button>
     <div class="game-title-bar">👾 Light Invaders</div>
-    <div id="inv-score-hdr" style="font-size:28px;font-weight:700;color:var(--teal);">Score: 0</div>
+    <div id="inv-score-hdr" class="inv-score-hdr">Score: 0</div>
   </div>
-  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;gap:8px;overflow:hidden;">
-    <canvas id="inv-canvas" style="border:2px solid var(--purple);border-radius:4px;display:block;image-rendering:pixelated;"></canvas>
+  <div class="game-body inv-body">
+    <canvas id="inv-canvas" style="border:2px solid var(--purple);display:block;image-rendering:pixelated;"></canvas>
   </div>
   <div class="blocks-ctrl">
     <button class="ctrl-btn" ontouchstart="invDir(-1)" ontouchend="invStop()" onmousedown="invDir(-1)" onmouseup="invStop()">◀</button>
@@ -447,26 +561,26 @@ body {
     <div class="game-title-bar">🔢 Sudoku</div>
     <button class="chess-btn" id="sdk-new" onclick="newSudoku()">New</button>
   </div>
-  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:16px;gap:20px;overflow:hidden;">
-    <div id="sdk-grid" style="display:grid;grid-template-columns:repeat(9,1fr);border:3px solid var(--purple);border-radius:4px;overflow:hidden;flex-shrink:0;"></div>
-    <div id="sdk-numpad" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;width:100%;">
-      <button class="ctrl-btn" onclick="sdkNum(1)" style="font-size:36px;padding:16px;">1</button>
-      <button class="ctrl-btn" onclick="sdkNum(2)" style="font-size:36px;padding:16px;">2</button>
-      <button class="ctrl-btn" onclick="sdkNum(3)" style="font-size:36px;padding:16px;">3</button>
-      <button class="ctrl-btn" onclick="sdkNum(4)" style="font-size:36px;padding:16px;">4</button>
-      <button class="ctrl-btn" onclick="sdkNum(5)" style="font-size:36px;padding:16px;">5</button>
-      <button class="ctrl-btn" onclick="sdkNum(6)" style="font-size:36px;padding:16px;">6</button>
-      <button class="ctrl-btn" onclick="sdkNum(7)" style="font-size:36px;padding:16px;">7</button>
-      <button class="ctrl-btn" onclick="sdkNum(8)" style="font-size:36px;padding:16px;">8</button>
-      <button class="ctrl-btn" onclick="sdkNum(9)" style="font-size:36px;padding:16px;">9</button>
-      <button class="ctrl-btn" onclick="sdkNum(0)" style="font-size:36px;padding:16px;color:var(--red);">✕</button>
+  <div class="game-body sdk-body">
+    <div id="sdk-grid" style="display:grid;grid-template-columns:repeat(9,1fr);border:3px solid var(--purple);border-radius:4px;overflow:hidden;"></div>
+    <div id="sdk-numpad" style="display:grid;grid-template-columns:repeat(5,1fr);">
+      <button class="ctrl-btn" onclick="sdkNum(1)">1</button>
+      <button class="ctrl-btn" onclick="sdkNum(2)">2</button>
+      <button class="ctrl-btn" onclick="sdkNum(3)">3</button>
+      <button class="ctrl-btn" onclick="sdkNum(4)">4</button>
+      <button class="ctrl-btn" onclick="sdkNum(5)">5</button>
+      <button class="ctrl-btn" onclick="sdkNum(6)">6</button>
+      <button class="ctrl-btn" onclick="sdkNum(7)">7</button>
+      <button class="ctrl-btn" onclick="sdkNum(8)">8</button>
+      <button class="ctrl-btn" onclick="sdkNum(9)">9</button>
+      <button class="ctrl-btn" onclick="sdkNum(0)" style="color:var(--red);">✕</button>
     </div>
-    <div style="font-size:28px;color:var(--text-dim);text-align:center;line-height:1.5;">
+    <div class="sdk-hint">
       Tap a cell, then tap a number.<br>
       Every row, column &amp; 3×3 box must have 1–9 with no repeats.<br>
       <span style="color:var(--teal);">Teal = your number</span> · <span style="color:var(--red);">Red = mistake</span>
     </div>
-    <div id="sdk-status" style="font-size:34px;color:var(--text-dim);text-align:center;"></div>
+    <div id="sdk-status"></div>
   </div>
 </div>
 
@@ -475,33 +589,33 @@ body {
   <div class="game-header">
     <button class="back-btn" onclick="go('hub')">← Back</button>
     <div class="game-title-bar">🃏 Blackjack</div>
-    <div id="bj-chips-hdr" style="font-size:52px;font-weight:700;color:var(--gold);">💰 1000</div>
+    <div id="bj-chips-hdr">💰 1000</div>
   </div>
-  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;padding:24px 20px;overflow-y:auto;">
-    <div style="text-align:center;width:100%;">
-      <div style="font-size:72px;font-weight:700;color:var(--text-dim);margin-bottom:10px;">Dealer</div>
-      <div id="bj-dealer-cards" style="font-size:180px;letter-spacing:10px;line-height:1;"></div>
-      <div id="bj-dealer-val" style="font-size:68px;font-weight:700;color:var(--gold);margin-top:6px;"></div>
+  <div class="bj-body">
+    <div class="bj-zone">
+      <div class="bj-label">Dealer</div>
+      <div id="bj-dealer-cards" class="bj-cards"></div>
+      <div id="bj-dealer-val" class="bj-val-gold"></div>
     </div>
-    <div style="width:100%;border-top:2px solid rgba(124,58,237,0.3);"></div>
-    <div style="text-align:center;width:100%;">
-      <div style="font-size:72px;font-weight:700;color:var(--text-dim);margin-bottom:10px;">You</div>
-      <div id="bj-player-cards" style="font-size:180px;letter-spacing:10px;line-height:1;"></div>
-      <div id="bj-player-val" style="font-size:68px;font-weight:700;color:var(--teal);margin-top:6px;"></div>
+    <div class="bj-divider"></div>
+    <div class="bj-zone">
+      <div class="bj-label">You</div>
+      <div id="bj-player-cards" class="bj-cards"></div>
+      <div id="bj-player-val" class="bj-val-teal"></div>
     </div>
-    <div id="bj-result" style="font-size:72px;font-weight:900;text-align:center;min-height:80px;"></div>
-    <div id="bj-bet-row" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;align-items:center;">
-      <span style="font-size:60px;font-weight:700;color:var(--text-dim);">Bet:</span>
-      <button class="play-btn" onclick="bjBet(10)" style="font-size:52px;padding:18px 36px;">+10</button>
-      <button class="play-btn" onclick="bjBet(50)" style="font-size:52px;padding:18px 36px;">+50</button>
-      <button class="play-btn" onclick="bjBet(100)" style="font-size:52px;padding:18px 36px;">+100</button>
-      <button class="play-btn" onclick="bjBet(-999)" style="font-size:52px;padding:18px 36px;background:var(--red);">Clear</button>
+    <div id="bj-result"></div>
+    <div id="bj-bet-row">
+      <span class="bj-bet-lbl">Bet:</span>
+      <button class="play-btn bj-chip-btn" onclick="bjBet(10)">+10</button>
+      <button class="play-btn bj-chip-btn" onclick="bjBet(50)">+50</button>
+      <button class="play-btn bj-chip-btn" onclick="bjBet(100)">+100</button>
+      <button class="play-btn bj-chip-btn bj-chip-clear" onclick="bjBet(-999)">Clear</button>
     </div>
-    <div id="bj-bet-show" style="font-size:68px;font-weight:700;color:var(--purple-light);text-align:center;"></div>
-    <div id="bj-actions" style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;">
-      <button class="play-btn" id="bj-deal-btn" onclick="bjDeal()" style="font-size:64px;padding:28px 90px;">Deal</button>
-      <button class="play-btn" id="bj-hit-btn" onclick="bjHit()" style="display:none;font-size:64px;padding:28px 90px;background:var(--teal);">Hit</button>
-      <button class="play-btn" id="bj-stand-btn" onclick="bjStand()" style="display:none;font-size:64px;padding:28px 90px;background:#555;">Stand</button>
+    <div id="bj-bet-show"></div>
+    <div id="bj-actions">
+      <button class="play-btn bj-action-btn" id="bj-deal-btn" onclick="bjDeal()">Deal</button>
+      <button class="play-btn bj-action-btn" id="bj-hit-btn" onclick="bjHit()" style="display:none;">Hit</button>
+      <button class="play-btn bj-action-btn" id="bj-stand-btn" onclick="bjStand()" style="display:none;">Stand</button>
     </div>
   </div>
 </div>
@@ -739,9 +853,22 @@ function initChess() {
 function newChess() { closeOv(); initChess(); }
 
 function boardSize() {
-  var maxW = window.innerWidth - 32;
-  var maxH = window.innerHeight - 340;
-  return Math.floor(Math.min(maxW, maxH) / 8) * 8;
+  var body = document.querySelector('#chess .chess-body');
+  var overhead = 0;
+  if (body) {
+    body.querySelectorAll('.chess-status,.chess-diff-row,.chess-btns').forEach(function(el){
+      overhead += el.offsetHeight;
+    });
+    var bs = getComputedStyle(body);
+    var gap = parseInt(bs.gap) || 20;
+    overhead += (parseInt(bs.paddingTop) || 0) + (parseInt(bs.paddingBottom) || 0) + gap * 3;
+  } else {
+    overhead = 520;
+  }
+  var maxW = (body ? body.clientWidth : window.innerWidth) - 32;
+  var maxH = (body ? body.clientHeight : window.innerHeight) - overhead - 16;
+  if (maxH < 80) maxH = Math.max(80, window.innerHeight - 560);
+  return Math.max(32, Math.floor(Math.min(maxW, maxH) / 8) * 8);
 }
 
 function drawBoard() {
@@ -944,10 +1071,13 @@ function initBlocks() {
   bCtx = bCv.getContext('2d');
   bNx  = bNc.getContext('2d');
 
-  var maxH = window.innerHeight - 240;
+  var bodyEl = document.querySelector('#lightblocks .blocks-body');
+  var sideW = 320;
+  var maxH = bodyEl && bodyEl.clientHeight > 80 ? bodyEl.clientHeight - 16 : window.innerHeight - 420;
+  var maxW = bodyEl && bodyEl.clientWidth > 200 ? bodyEl.clientWidth - sideW - 48 : window.innerWidth - sideW - 48;
   var ch = Math.floor(maxH / BR);
-  var cw = Math.floor((window.innerWidth - 160) / BC);
-  bCS = Math.min(ch, cw);
+  var cw = Math.floor(maxW / BC);
+  bCS = Math.max(12, Math.min(ch, cw));
 
   bCv.width  = BC * bCS;
   bCv.height = BR * bCS;
@@ -1085,11 +1215,13 @@ function drawBCell(ctx,c,r,color,cs) {
 }
 
 function drawNext() {
-  var ctx=bNx, m=TETS[bNext], cs=15;
+  var ctx=bNx, m=TETS[bNext];
+  var w=bNc.width, h=bNc.height;
+  var cs=Math.max(14, Math.floor(Math.min(w,h)/5));
   ctx.fillStyle='#0a0a1a';
-  ctx.fillRect(0,0,72,72);
-  var ox=Math.floor((72-m[0].length*cs)/2);
-  var oy=Math.floor((72-m.length*cs)/2);
+  ctx.fillRect(0,0,w,h);
+  var ox=Math.floor((w-m[0].length*cs)/2);
+  var oy=Math.floor((h-m.length*cs)/2);
   for (var r=0;r<m.length;r++) {
     for (var c=0;c<m[r].length;c++) {
       if (!m[r][c]) continue;
@@ -1202,9 +1334,22 @@ function placeMines(sr,sc) {
 function drawMines() {
   var grid=document.getElementById('mines-grid');
   var cfg=mCfg;
-  var maxW=window.innerWidth-16;
-  var maxH=window.innerHeight-260;
-  var cs=Math.floor(Math.min(maxW/cfg.cols,maxH/cfg.rows));
+  var bodyEl=document.querySelector('#minesweeper .mines-body');
+  var overhead=0;
+  if (bodyEl) {
+    bodyEl.querySelectorAll('.mines-hud,.mines-diffs,.mines-hint').forEach(function(el){
+      overhead += el.offsetHeight;
+    });
+    var bs=getComputedStyle(bodyEl);
+    var gap=parseInt(bs.gap)||24;
+    overhead += (parseInt(bs.paddingTop)||0) + (parseInt(bs.paddingBottom)||0) + gap * 3;
+  } else {
+    overhead=400;
+  }
+  var maxW=(bodyEl?bodyEl.clientWidth:window.innerWidth)-32;
+  var maxH=(bodyEl?bodyEl.clientHeight:window.innerHeight)-overhead-16;
+  if (maxH<80) maxH=Math.max(80, window.innerHeight-520);
+  var cs=Math.max(20, Math.floor(Math.min(maxW/cfg.cols,maxH/cfg.rows)));
   grid.style.gridTemplateColumns='repeat('+cfg.cols+','+cs+'px)';
   grid.style.gridTemplateRows='repeat('+cfg.rows+','+cs+'px)';
   grid.innerHTML='';
@@ -1297,8 +1442,9 @@ window.addEventListener('resize', function(){
   if(cur==='chess') drawBoard();
   if(cur==='lightblocks'&&bCv) initBlocks();
   if(cur==='minesweeper') drawMines();
-  if(cur==='runner'&&runCv&&runRunning) sizeRunnerCanvas();
+  if(cur==='runner'&&runCv) sizeRunnerCanvas();
   if(cur==='invaders'&&invCv) initInvaders();
+  if(cur==='sudoku') renderSudoku();
 });
 
 // =============================================
@@ -1312,9 +1458,20 @@ function sizeRunnerCanvas() {
   if (!runCv) return;
   var body = document.querySelector('.runner-body');
   var bw = body ? body.clientWidth : window.innerWidth;
+  var overhead = 0;
+  if (body) {
+    body.querySelectorAll('.runner-hud,.runner-ctrl,.runner-hint').forEach(function(el){
+      overhead += el.offsetHeight;
+    });
+    var bs = getComputedStyle(body);
+    var gap = parseInt(bs.gap) || 20;
+    overhead += (parseInt(bs.paddingTop) || 0) + (parseInt(bs.paddingBottom) || 0) + gap * 3;
+  } else {
+    overhead = 300;
+  }
   var bh = body ? body.clientHeight : window.innerHeight;
   runW = Math.max(320, Math.floor(bw - 8));
-  runH = Math.max(300, Math.floor(bh - 100));
+  runH = Math.max(160, Math.floor(bh - overhead - 16));
   runCv.width = runW;
   runCv.height = runH;
   if (runPlayer && runGround) {
@@ -1361,9 +1518,15 @@ function newRunner() {
   runAnimId = requestAnimationFrame(runLoop);
 }
 
+function runGravity() { return Math.max(0.45, runH * 0.0009); }
+function runJumpPower() {
+  var h = runPlayer ? runPlayer.h : 60;
+  return -Math.sqrt(2 * runGravity() * h * 1.55);
+}
+
 function runJump() {
   if (!runRunning || !runPlayer || !runPlayer.grounded) return;
-  runPlayer.vy = -12;
+  runPlayer.vy = runJumpPower();
   runPlayer.grounded = false;
 }
 
@@ -1382,7 +1545,7 @@ function runStep() {
   }
   if (runFrame % 400 === 0 && runSpeed < 11) runSpeed += 0.4;
 
-  runPlayer.vy += 0.5;
+  runPlayer.vy += runGravity();
   runPlayer.y += runPlayer.vy;
   if (runPlayer.y >= runGround - runPlayer.h) {
     runPlayer.y = runGround - runPlayer.h;
@@ -1397,8 +1560,8 @@ function runStep() {
   } else {
     var lastX = runObstacles.length ? runObstacles[runObstacles.length - 1].x : -999;
     if (lastX < runW - 260) {
-      var oh = Math.floor(runPlayer.h * 0.8);
-      runObstacles.push({ x: runW + 24, w: 30 + Math.floor(Math.random() * 16), h: oh, y: runGround - oh });
+      var oh = Math.floor(runPlayer.h * 0.42);
+      runObstacles.push({ x: runW + 24, w: 28 + Math.floor(Math.random() * 14), h: oh, y: runGround - oh });
       runSpawnTimer = 100 + Math.floor(Math.random() * 50);
     } else {
       runSpawnTimer = 15;
@@ -1497,9 +1660,12 @@ var invPlayerDir=0, invPlayerMoving=false;
 var INV_W, INV_H, INV_CELL;
 
 function invSize() {
-  INV_W = Math.min(window.innerWidth - 20, 900);
-  INV_H = window.innerHeight - 220;
-  INV_CELL = Math.floor(INV_W / 18);
+  var body = document.querySelector('#invaders .inv-body');
+  var bw = body ? body.clientWidth - 16 : window.innerWidth - 20;
+  var bh = body ? body.clientHeight - 16 : window.innerHeight - 320;
+  INV_W = Math.min(Math.max(320, bw), 900);
+  INV_H = Math.max(200, bh);
+  INV_CELL = Math.max(12, Math.floor(INV_W / 18));
 }
 
 function initInvaders() {
@@ -1841,8 +2007,22 @@ function countSolutions(grid) {
 
 function renderSudoku() {
   var grid = document.getElementById('sdk-grid');
-  var maxW = Math.min(window.innerWidth-24, window.innerHeight-320);
-  var cs = Math.floor(maxW/9);
+  var body = document.querySelector('#sudoku .sdk-body');
+  var overhead = 0;
+  if (body) {
+    body.querySelectorAll('#sdk-numpad,.sdk-hint,#sdk-status').forEach(function(el){
+      overhead += el.offsetHeight;
+    });
+    var bs = getComputedStyle(body);
+    var gap = parseInt(bs.gap) || 20;
+    overhead += (parseInt(bs.paddingTop) || 0) + (parseInt(bs.paddingBottom) || 0) + gap * 3;
+  } else {
+    overhead = 480;
+  }
+  var maxW = (body ? body.clientWidth : window.innerWidth) - 24;
+  var maxH = (body ? body.clientHeight : window.innerHeight) - overhead - 16;
+  if (maxH < 80) maxH = Math.max(80, window.innerHeight - 560);
+  var cs = Math.max(28, Math.floor(Math.min(maxW, maxH) / 9));
   grid.style.width=(cs*9)+'px'; grid.style.height=(cs*9)+'px';
   grid.innerHTML='';
 
