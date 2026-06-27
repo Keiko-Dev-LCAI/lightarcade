@@ -1409,7 +1409,7 @@ function initInvaders() {
     var rect = invCv.getBoundingClientRect();
     INV_W = Math.max(320, Math.floor(rect.width  || window.innerWidth  - 20));
     INV_H = Math.max(260, Math.floor(rect.height || window.innerHeight - 200));
-    INV_CELL = Math.max(20, Math.floor(Math.min(INV_W / 18, INV_H / 12)));
+    INV_CELL = Math.max(20, Math.min(38, Math.floor(Math.min(INV_W / 18, INV_H / 12))));
     invCv.width  = INV_W;
     invCv.height = INV_H;
     newInvGame();
@@ -1427,7 +1427,7 @@ function newInvGame() {
     if (rect.width > 80) {
       INV_W = Math.floor(rect.width);
       INV_H = Math.floor(rect.height);
-      INV_CELL = Math.max(20, Math.floor(Math.min(INV_W / 18, INV_H / 12)));
+      INV_CELL = Math.max(20, Math.min(38, Math.floor(Math.min(INV_W / 18, INV_H / 12))));
       invCv.width  = INV_W;
       invCv.height = INV_H;
     }
