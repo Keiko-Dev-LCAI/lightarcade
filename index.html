@@ -164,8 +164,8 @@ body {
 .cdiff-btn:active { background: var(--purple); color: white; }
 
 #chess .chess-body {
-  align-items: center; justify-content: flex-start;
-  overflow-y: auto; overflow-x: hidden; min-height: 0;
+  align-items: center; justify-content: center;
+  overflow: hidden; min-height: 0;
 }
 #chess .chess-status { font-size: 40px; padding: 14px 28px; border-radius: 12px; flex-shrink: 0; }
 #chess .chess-diff-row { gap: 12px; flex-shrink: 0; flex-wrap: wrap; justify-content: center; }
@@ -203,8 +203,8 @@ body {
 
 #lightblocks .blocks-body {
   flex: 1; min-height: 0; flex-direction: row;
-  align-items: flex-start; justify-content: center;
-  gap: 28px; padding: 20px; overflow-y: auto; overflow-x: hidden;
+  align-items: center; justify-content: center;
+  gap: 14px; padding: 8px; overflow: hidden;
 }
 #lightblocks .blocks-side { gap: 14px; min-width: 160px; flex-shrink: 0; }
 #lightblocks .blocks-stat {
@@ -794,22 +794,9 @@ function initChess() {
 function newChess() { closeOv(); initChess(); }
 
 function boardSize() {
-  var body = document.querySelector('#chess .chess-body');
-  var overhead = 0;
-  if (body) {
-    body.querySelectorAll('.chess-status,.chess-diff-row,.chess-btns').forEach(function(el){
-      overhead += el.offsetHeight;
-    });
-    var bs = getComputedStyle(body);
-    var gap = parseInt(bs.gap) || 20;
-    overhead += (parseInt(bs.paddingTop) || 0) + (parseInt(bs.paddingBottom) || 0) + gap * 3;
-  } else {
-    overhead = 520;
-  }
-  var maxW = (body ? body.clientWidth : window.innerWidth) - 32;
-  var maxH = (body ? body.clientHeight : window.innerHeight) - overhead - 16;
-  if (maxH < 80) maxH = Math.max(80, window.innerHeight - 560);
-  return Math.max(32, Math.floor(Math.min(maxW, maxH) / 8) * 8);
+  var maxW = window.innerWidth - 32;
+  var maxH = window.innerHeight - 340;
+  return Math.max(64, Math.floor(Math.min(maxW, maxH) / 8) * 8);
 }
 
 function drawBoard() {
@@ -1012,13 +999,12 @@ function initBlocks() {
   bCtx = bCv.getContext('2d');
   bNx  = bNc.getContext('2d');
 
-  var bodyEl = document.querySelector('#lightblocks .blocks-body');
   var sideW = 180;
-  var maxH = bodyEl && bodyEl.clientHeight > 80 ? bodyEl.clientHeight - 16 : window.innerHeight - 420;
-  var maxW = bodyEl && bodyEl.clientWidth > 200 ? bodyEl.clientWidth - sideW - 48 : window.innerWidth - sideW - 48;
+  var maxH = window.innerHeight - 230;
+  var maxW = window.innerWidth - sideW - 40;
   var ch = Math.floor(maxH / BR);
   var cw = Math.floor(maxW / BC);
-  bCS = Math.max(12, Math.min(ch, cw));
+  bCS = Math.max(14, Math.min(ch, cw));
 
   bCv.width  = BC * bCS;
   bCv.height = BR * bCS;
@@ -1478,7 +1464,7 @@ function setupInvLevel() {
   }
 
   invAlienDir = 1; invAlienSpeed = 500 - invLevel*30;
-  invDropDist = cs * 0.6;
+  invDropDist = cs * 0.25;
   invRunning = true;
 
   clearInterval(invLoop);
